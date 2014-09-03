@@ -25,9 +25,12 @@ package com.echo.holographlibrary;
 
 import java.util.ArrayList;
 
+import android.view.*;
+
 public class Line {
 
     private ArrayList<LinePoint> points = new ArrayList<LinePoint>();
+    private ArrayList<Coordinates> coordinates = new ArrayList<Coordinates> ();
     private int color;
     private boolean showPoints = true;
 
@@ -66,6 +69,31 @@ public class Line {
 
     public void setShowingPoints(boolean showPoints) {
         this.showPoints = showPoints;
+    }
+    
+    /**
+     * 좌표와 해당하는 값을 ArrayList에 추가.
+     * 
+ 	 * @author leejeongho
+	 * @since 2014.09.03
+	 * @param x x 좌표.
+	 * @param y y 좌표.
+	 * @param value 좌표에 해당하는 값.
+     */
+    public void addCoordinate (float x, float y, float value){
+    	coordinates.add(new Coordinates(x, y, value));
+    }
+    
+    /**
+     * 해당하는 point 에 맞춰 ArrayList에 있는 {@link Coordinates} 를 반환.
+     * 
+     * @author leejeongho
+     * @since 2014.09.03
+     * @param index point에 대한 index
+     * @return ArrayList에 있는 {@link Coordinates}
+     */
+    public Coordinates getCoordinates (int index){
+    	return coordinates.get(index);
     }
 
 }

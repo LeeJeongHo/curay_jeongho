@@ -1092,11 +1092,11 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f070016;
         public static final int action_menu_presenter=0x7f070017;
         public static final int action_mode_close_button=0x7f070024;
-        public static final int action_settings=0x7f070045;
+        public static final int action_settings=0x7f070046;
         public static final int activity_chooser_view_content=0x7f070025;
         public static final int always=0x7f07000b;
         public static final int beginning=0x7f070011;
-        public static final int btn_blood_main=0x7f070044;
+        public static final int btn_blood_main=0x7f070045;
         public static final int checkbox=0x7f07002d;
         public static final int collapseActionView=0x7f07000d;
         public static final int default_activity_button=0x7f070028;
@@ -1118,7 +1118,7 @@ containing a value of this type.
         public static final int listMode=0x7f070001;
         public static final int list_item=0x7f070029;
         public static final int ll_content_root=0x7f07003d;
-        public static final int ll_graph_x_label=0x7f070043;
+        public static final int ll_graph_x_label=0x7f070044;
         public static final int middle=0x7f070012;
         public static final int never=0x7f070009;
         public static final int none=0x7f070010;
@@ -1127,6 +1127,7 @@ containing a value of this type.
         public static final int progress_horizontal=0x7f070019;
         public static final int radio=0x7f07002f;
         public static final int rl_graph_root=0x7f07003e;
+        public static final int rl_tooltip=0x7f070043;
         public static final int search_badge=0x7f070032;
         public static final int search_bar=0x7f070031;
         public static final int search_button=0x7f070033;

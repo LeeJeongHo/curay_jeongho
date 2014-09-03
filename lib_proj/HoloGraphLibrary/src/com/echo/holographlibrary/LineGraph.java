@@ -46,17 +46,41 @@ public class LineGraph extends View {
 	private OnPointClickedListener listener;
 	private Bitmap fullImage;
 	private boolean shouldUpdate = false;
-    private boolean showMinAndMax = false;
-    private boolean showHorizontalGrid = false;
-	private int gridColor = 0xffffffff;
+	/**
+	 * 기본설정을 false에서 true로 바꿈.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 */
+    private boolean showMinAndMax = true;
+    /**
+	 * 기본설정을 false에서 true로 바꿈.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 */
+    private boolean showHorizontalGrid = true;
+    /**
+	 * 기본설정을 0xffffffff에서 0xff878787로 바꿈.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 */
+    private int gridColor = 0xff878787;
 	
 	public LineGraph(Context context){
 		this(context,null);
 	}
 	public LineGraph(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		txtPaint.setColor(0xffffffff);
-		txtPaint.setTextSize(20);
+		/**
+		 * 기본사이즈와 색상을 바꿈.
+		 * 
+		 * @author leejeongho
+		 * @since 2014.09.03
+		 */
+		txtPaint.setColor(0xff424242);
+		txtPaint.setTextSize(35);
 		txtPaint.setAntiAlias(true);
 	}
 	public void setGridColor(int color)
@@ -157,7 +181,27 @@ public class LineGraph extends View {
 			return minY;
 		}
 	}
+	
+	/**
+	 * 기존 라이브러리는 입력된 값의 최대, 최소를 기준으로 그리기때문에 x축이 동적으로 할당됨.
+	 * 혈당관리 서비스앱에서는 x축이 일, 주, 월, 년 으로 고정이기 때문에 x축 최대값을 별도로 설정.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 * @param x x축의 최대값.
+	 */
+	public void setMaxX(float x) {
+		this.maxX = x;
+	}
+    /**
+     * x입력값중 최대를 반환하던것을 설정된 값으로 반환하게 바꿈.
+     * 
+     * @author leejeongho
+     * @since 2014.09.03
+     * @return {@link maxX}
+     */
 	public float getMaxX(){
+/*
 		float max = lines.get(0).getPoint(0).getX();
 		for (Line line : lines){
 			for (LinePoint point : line.getPoints()){
@@ -165,9 +209,26 @@ public class LineGraph extends View {
 			}
 		}
 		maxX = max;
-//		return maxX;
-	    return 24.f;	
+*/
+		return maxX;
 	}
+	
+	/**
+	 * x축의 시작 범위.
+	 * x축의 시작 범위를 변경하고 싶을때 설정.
+	 * 
+	 * @param x x축의 최소값.
+	 */
+	public void setMinX(float x){
+		this.minX = x;
+	}
+    /**
+     * x입력값중 최대를 반환하던것을 설정된 값으로 반환하게 바꿈.
+     * 
+     * @author leejeongho
+     * @since 2014.09.03
+     * @return {@link maxX}
+     */
 	public float getMinX(){
 		float max = lines.get(0).getPoint(0).getX();
 		for (Line line : lines){
@@ -175,8 +236,9 @@ public class LineGraph extends View {
 				if (point.getX() < max) max = point.getX();
 			}
 		}
-		maxX = max;
-		return maxX;
+//		maxX = max;
+//		return maxX;
+		return minX;
 	}
 	
 	public void onDraw(Canvas ca) {
@@ -272,14 +334,23 @@ public class LineGraph extends View {
 			paint.setAlpha(50);
 			paint.setAntiAlias(true);
 			canvas.drawLine(sidePadding, getHeight() - bottomPadding, getWidth(), getHeight()-bottomPadding, paint);
+			
+			/**
+			 * 기존 Y축을 10등분해서 GridLine을 표시하던것을 중간값과 최대값을 표시하게 변경.
+			 * 
+			 * @author leejeongho
+			 * @since 2014.09.03
+			 */
 			if(this.showHorizontalGrid){
 				canvas.drawLine(sidePadding, (getHeight() - bottomPadding)/2, getWidth(), (getHeight() - bottomPadding)/2, paint);
 				canvas.drawLine(sidePadding, bottomPadding, getWidth(), bottomPadding, paint);
 			}
-//				for(int i=1;i<=10;i++)
-	//			{
-		//			canvas.drawLine(sidePadding, getHeight() - bottomPadding-(i*lineSpace), getWidth(), getHeight()-bottomPadding-(i*lineSpace), paint);
-			//	}
+/*
+			for(int i=1;i<=10;i++)
+				{
+					canvas.drawLine(sidePadding, getHeight() - bottomPadding-(i*lineSpace), getWidth(), getHeight()-bottomPadding-(i*lineSpace), paint);
+				}
+*/
 			paint.setAlpha(255);
 			
 			
@@ -337,11 +408,23 @@ public class LineGraph extends View {
 						float xPixels = sidePadding + (xPercent*usableWidth);
 						float yPixels = getHeight() - bottomPadding - (usableHeight*yPercent);
 						
-						paint.setColor(Color.GRAY);
+						/**
+						 * 포인트의 색상을 line 색과 동일하게 표현되도록 변경.
+						 * 
+						 * @author leejeongho
+						 * @since 2014.09.03
+						 */
+						paint.setColor(line.getColor());
 						canvas.drawCircle(xPixels, yPixels, 10, paint);
 						paint.setColor(Color.WHITE);
 						canvas.drawCircle(xPixels, yPixels, 5, paint);
-						canvas.drawText(String.valueOf(p.getY()), xPixels+20, yPixels+20, labelPaint);
+						/** 
+						 * Tooltip 표시를 위해 포인트마다 좌표와 값을 저장.
+						 * 
+						 * @author leejeongho
+						 * @since 2014.09.03
+						 */
+						line.addCoordinate(xPixels, yPixels, p.getY());
 						
 						Path path2 = new Path();
 						path2.addCircle(xPixels, yPixels, 30, Direction.CW);
@@ -373,7 +456,7 @@ public class LineGraph extends View {
 		
 		ca.drawBitmap(fullImage, 0, 0, null);
 		
-		
+		update();
 	}
 	
 	@Override

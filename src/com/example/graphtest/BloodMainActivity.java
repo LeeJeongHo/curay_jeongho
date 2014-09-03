@@ -1,5 +1,7 @@
 package com.example.graphtest;
 
+import java.lang.Character.*;
+
 import android.support.v7.app.ActionBarActivity;
 import android.graphics.*;
 import android.os.Bundle;
@@ -9,23 +11,34 @@ import android.view.MenuItem;
 import android.widget.*;
 import android.widget.RelativeLayout.LayoutParams;
 
-import com.echo.holographlibrary.Line;
-import com.echo.holographlibrary.LineGraph;
+import com.echo.holographlibrary.*;
 import com.echo.holographlibrary.LineGraph.OnPointClickedListener;
-import com.echo.holographlibrary.LinePoint;
 
 public class BloodMainActivity extends ActionBarActivity {
+	/** Graph 를 그리는 Canvas 영역 */
 	LineGraph li;
+	/** 정상범위 표시를 위한 ImageView */
 	ImageView ivNormal;
+    /** 포인트를 클릭했을때 Tooltip 표시를 위한 영역 */
+	RelativeLayout rlTooltip;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_blood_main);
 		ivNormal = (ImageView)findViewById(R.id.iv_normal);
-        init_graph();
+		rlTooltip = (RelativeLayout)findViewById(R.id.rl_tooltip);
+        initGraph();
 	}
-	
-	private void init_graph(){
+
+	/**
+	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.02
+	 */
+	private void initGraph(){
 		Line l = new Line();
 		LinePoint p = new LinePoint();
 		p.setX(0);
@@ -57,18 +70,13 @@ public class BloodMainActivity extends ActionBarActivity {
 		l2.setColor(Color.parseColor("#f5a700"));
 		
 		int maxY = 300;
-		int minY = 0;
+		int minY = 80;
+		
 		li = (LineGraph)findViewById(R.id.linegraph);
 		li.addLine(l);
 		li.addLine(l2);
 		li.setRangeY(minY, maxY);
-		li.setLineToFill(-1);
-		li.showHorizontalGrid(true);
-		li.showMinAndMaxValues(true);
-		li.setGridColor(0xff878787);
-		li.setTextSize(40.f);
-		li.setTextColor(0xff424242);
-		
+		li.setMaxX(24.f);
 		
 		li.setOnPointClickedListener(new OnPointClickedListener(){
 
@@ -76,21 +84,65 @@ public class BloodMainActivity extends ActionBarActivity {
 			public void onClick(int lineIndex, int pointIndex) {
 				// TODO Auto-generated method stub
 				LinePoint pp = li.getLine(lineIndex).getPoint(pointIndex);
-				
-				Toast.makeText(getApplicationContext(), ""+li.getMaxX(), Toast.LENGTH_SHORT).show();	
+				Coordinates coordinates = li.getLine(lineIndex).getCoordinates(pointIndex);
+				addTooltip(coordinates);
 			}
-			
-		});		
+		});	
 		
-		int px_height = toPix(150);
-		float per_height = (float)px_height / (maxY - minY);
-		float iv_normal_height = per_height * 25;
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)iv_normal_height);
-		rlParams.setMargins(toPix(40), (int)(toPix(56)+((maxY-125)*per_height)), toPix(20), 0);
-		ivNormal.setLayoutParams(rlParams);
 		
+		setNormalRange(minY, maxY, 100, 125);
 	}
 	
+	/**
+	 * Graph에 정상범위 표시.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 * @param minY Y 범위의 최소값.
+	 * @param maxY Y 범위의 최대값.
+	 * @param minNormal 정상범위의 최소값.
+	 * @param maxNormal 정상범위의 최대값.
+	 */
+	private void setNormalRange(int minY, int maxY, int minNormal, int maxNormal) {
+		int px_height = toPix(150);
+		float per_height = (float)px_height / (maxY - minY);
+		float iv_normal_height = per_height * (maxNormal-minNormal);
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)iv_normal_height);
+		rlParams.setMargins(toPix(40), (int)(toPix(56)+((maxY-maxNormal)*per_height)), toPix(20), 0);
+		ivNormal.setLayoutParams(rlParams);
+	}
+	
+	/**
+	 * 포인트를 클릭했을때 값을 표시.
+	 * ** 라이브러리에서 포인트를 그려넣을때의 Pixel좌표를 그대로 사용하므로 dip 변환을 안해도됨. **
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 * @param coordinates {@link Coordinates}
+	 */
+	private void addTooltip(Coordinates coordinates){
+        rlTooltip.removeAllViews();
+		
+        RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        rlParams.setMargins((int)coordinates.getX()+10, (int)coordinates.getY()+10, 0, 0);
+        TextView tvTooltip = new TextView(getApplicationContext());
+        tvTooltip.setLayoutParams(rlParams);
+        tvTooltip.setText(""+coordinates.getValue());
+        tvTooltip.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        tvTooltip.setTextColor(0xff424242);
+        tvTooltip.setBackgroundColor(0xffbcbc00);
+        rlTooltip.addView(tvTooltip);
+	}
+	
+	/**
+	 * DIP 수치를 Pixel 수치로 변환.
+	 * 동적으로 View를 그려넣을때 필요.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 * @param value 변환할 DIP 수치.
+	 * @return 변환된 Pixel 수치.
+	 */
 	private int toPix(int value){
 		
 		return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getApplicationContext().getResources().getDisplayMetrics());
