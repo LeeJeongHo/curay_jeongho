@@ -46,13 +46,8 @@ public class LineGraph extends View {
 	private OnPointClickedListener listener;
 	private Bitmap fullImage;
 	private boolean shouldUpdate = false;
-	/**
-	 * 기본설정을 false에서 true로 바꿈.
-	 * 
-	 * @author leejeongho
-	 * @since 2014.09.03
-	 */
-    private boolean showMinAndMax = true;
+    private boolean showMinAndMax = false;
+    
     /**
 	 * 기본설정을 false에서 true로 바꿈.
 	 * 
@@ -60,6 +55,7 @@ public class LineGraph extends View {
 	 * @since 2014.09.03
 	 */
     private boolean showHorizontalGrid = true;
+    
     /**
 	 * 기본설정을 0xffffffff에서 0xff878787로 바꿈.
 	 * 

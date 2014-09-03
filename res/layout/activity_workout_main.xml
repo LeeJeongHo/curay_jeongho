@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="15dp"
-                    android:text="08월 28일"
+                    android:text="08월 21일 ~ 8월 27"
                     android:textColor="#78adcc"
                     android:textSize="15sp" />
 
@@ -38,75 +38,17 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/tv_date"
                     android:layout_below="@id/tv_date"
-                    android:text="mg/dL"
+                    android:text="kcal"
                     android:textColor="#9c9c9c"
                     android:textSize="10sp" />
 
-                <ImageView
-                    android:id="@+id/iv_legend_after"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/tv_date"
-                    android:layout_marginRight="40dp"
-                    android:background="@drawable/graph_icon_after" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/iv_legend_after"
-                    android:layout_marginTop="-2dp"
-                    android:layout_marginRight="15dp"
-                    android:text="식후"
-                    android:textColor="#424242"
-                    android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/iv_legend_before"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/iv_legend_after"
-                    android:layout_below="@id/iv_legend_after"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginRight="40dp"
-                    android:background="@drawable/graph_icon_before" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/iv_legend_before"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="-2dp"
-                    android:layout_marginRight="15dp"
-                    android:text="식전"
-                    android:textColor="#424242"
-                    android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/iv_normal"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="56dp"
-                    android:background="#ebf4f7" />
-
-                <ImageView
-                    android:id="@+id/iv_adnormal"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="56dp"
-                    android:background="#fcf4e1" />
-
-                <com.echo.holographlibrary.LineGraph
-                    android:id="@+id/linegraph"
+                <com.echo.holographlibrary.BarGraph
+                    android:id="@+id/bargraph"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="40dp"
                     android:layout_marginRight="20dp" />
 
                 <RelativeLayout
@@ -115,7 +57,7 @@
                     android:layout_height="150dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="40dp"
                     android:layout_marginRight="20dp" />
 
                 <RelativeLayout

@@ -38,15 +38,17 @@ public class BarGraph extends View {
 
     private ArrayList<Bar> points = new ArrayList<Bar>();
     private Paint p = new Paint();
+	private Paint txtPaint = new Paint();
     private Path path = new Path();
     private Rect r;
-    private boolean showBarText = true;
+    private boolean showBarText = false;
     private int indexSelected = -1;
+    private float maxValue = 0;
     private OnBarClickedListener listener;
     private Bitmap fullImage;
     private boolean shouldUpdate = false;
-    private String unit = "$";
-    private Boolean append = false;
+    private String unit = "kcal";
+    private Boolean append = true;
     private Rect r2 = new Rect();
     private Rect r3 = new Rect();
 
@@ -56,6 +58,9 @@ public class BarGraph extends View {
 
     public BarGraph(Context context, AttributeSet attrs) {
         super(context, attrs);
+    	txtPaint.setColor(0xff424242);
+		txtPaint.setTextSize(35);
+		txtPaint.setAntiAlias(true);
     }
 
     public void setShowBarText(boolean show) {
@@ -78,6 +83,12 @@ public class BarGraph extends View {
     public void appendUnit(Boolean doAppend) {
         this.append = doAppend;
     }
+    public void setMaxValue(float value){
+    	this.maxValue = value;
+    }
+    public float getMaxValue(){
+    	return this.maxValue;
+    }
 
     public Boolean isAppended() {
         return this.append;
@@ -95,10 +106,10 @@ public class BarGraph extends View {
             canvas.drawColor(Color.TRANSPARENT);
             NinePatchDrawable popup = (NinePatchDrawable) this.getResources().getDrawable(R.drawable.popup_black);
 
-            float maxValue = 0;
+            
             float padding = 7;
             int selectPadding = 4;
-            float bottomPadding = 40;
+            float bottomPadding = 1;
 
             float usableHeight;
             if (showBarText) {
@@ -115,14 +126,19 @@ public class BarGraph extends View {
             p.setAlpha(50);
             p.setAntiAlias(true);
 
-            canvas.drawLine(0, getHeight() - bottomPadding + 10, getWidth(), getHeight() - bottomPadding + 10, p);
+            /* GridLine */
+            canvas.drawLine(0, getHeight() - bottomPadding, getWidth(), getHeight() - bottomPadding, p);
+            canvas.drawLine(0, (getHeight() - bottomPadding)/2, getWidth(), (getHeight() - bottomPadding)/2, p);
+			canvas.drawLine(0, bottomPadding, getWidth(), bottomPadding, p);
 
             float barWidth = (getWidth() - (padding * 2) * points.size()) / points.size();
 
+            maxValue = getMaxValue();
+/*            
             for (Bar p : points) {
                 maxValue += p.getValue();
             }
-
+*/
             r = new Rect();
 
             path.reset();
@@ -139,7 +155,7 @@ public class BarGraph extends View {
                 this.p.setAlpha(255);
                 canvas.drawRect(r, this.p);
                 this.p.setTextSize(20);
-                canvas.drawText(p.getName(), (int) (((r.left + r.right) / 2) - (this.p.measureText(p.getName()) / 2)), getHeight() - 5, this.p);
+//                canvas.drawText(p.getName(), (int) (((r.left + r.right) / 2) - (this.p.measureText(p.getName()) / 2)), getHeight() - 5, this.txtPaint);
                 if (showBarText) {
                     this.p.setTextSize(40);
                     this.p.setColor(Color.WHITE);
@@ -182,7 +198,7 @@ public class BarGraph extends View {
                 indexSelected = count;
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (r.contains(point.x, point.y) && listener != null) {
-                    listener.onClick(indexSelected);
+                    listener.onClick(count);
                 }
                 indexSelected = -1;
             }

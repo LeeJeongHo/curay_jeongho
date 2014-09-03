@@ -8,25 +8,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.graphtest.MainActivity" >
 
-    <ScrollView 
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout 
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           android:gravity="center_horizontal">
-           
-            <Button 
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <Button
                 android:id="@+id/btn_blood_main"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
-                android:text="blood_main"
-                />
+                android:text="blood_main" />
             
-            
+            <Button
+                android:id="@+id/btn_workout_main"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="workout_main" />
         </LinearLayout>
-        
     </ScrollView>
-    
+
 </RelativeLayout>

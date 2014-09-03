@@ -28,7 +28,11 @@
         <activity
             android:name=".BloodMainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".WorkoutMainActivity"
+            android:label="@string/title_activity_workout_main" >
         </activity>
     </application>
 

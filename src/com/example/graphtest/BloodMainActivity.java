@@ -1,8 +1,10 @@
 package com.example.graphtest;
 
 import java.lang.Character.*;
+import java.util.*;
 
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.*;
 import android.graphics.*;
 import android.os.Bundle;
 import android.util.*;
@@ -77,6 +79,18 @@ public class BloodMainActivity extends ActionBarActivity {
 		
 		int maxY = 300;
 		int minY = 60;
+		int goalY = 110;
+		
+		Date today = new Date();
+		TextView tvDate = (TextView)findViewById(R.id.tv_date);
+		tvDate.setText(DateFormat.format("MMMM d, yyyy ", today.getTime()));
+		
+		TextView tvMaxY = (TextView)findViewById(R.id.tv_max_y);
+		TextView tvHalfY = (TextView)findViewById(R.id.tv_half_y);
+		TextView tvMinY = (TextView)findViewById(R.id.tv_min_y);
+		tvMaxY.setText(""+((int)maxY));
+		tvHalfY.setText(""+((int)(((maxY-minY)/2)+minY)));
+		tvMinY.setText(""+((int)minY));
 		
 		li = (LineGraph)findViewById(R.id.linegraph);
 		li.addLine(l);
@@ -98,7 +112,7 @@ public class BloodMainActivity extends ActionBarActivity {
 		
 		setNormalRange(minY, maxY, 100, 125);
 		setAdnormalRange(minY, maxY, 0, 100);
-		setGoal(minY, maxY, 110);
+		setGoal(minY, maxY, goalY);
 	}
 	
 	/**
@@ -145,8 +159,15 @@ public class BloodMainActivity extends ActionBarActivity {
 		ivAdnormal.setLayoutParams(rlParams);
 	}
 	
+	/**
+	 * Graph에 목표수치 표시.
+	 * 
+	 * @param minY Y 범위의 최소값.
+	 * @param maxY Y 범위의 최대값.
+	 * @param value 목표수치 값.
+	 */
 	private void setGoal(int minY, int maxY, int value){
-		/** 목표 표시를 위한 View */
+		/** 목표 표시를 위한 별도의 View */
 		RelativeLayout rlGoal = (RelativeLayout)findViewById(R.id.ll_goal);
 
 		int px_height = toPix(150);
