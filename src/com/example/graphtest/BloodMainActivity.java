@@ -54,6 +54,9 @@ public class BloodMainActivity extends ActionBarActivity {
 		p = new LinePoint();
 		p.setX(10*60);
 		p.setY(400);
+		p = new LinePoint();
+		p.setX(24*60);
+		p.setY(180);
 		l.addPoint(p);
 		l.setColor(Color.parseColor("#5caecc"));
 		
@@ -73,7 +76,7 @@ public class BloodMainActivity extends ActionBarActivity {
 		l2.setColor(Color.parseColor("#f5a700"));
 		
 		int maxY = 300;
-		int minY = 80;
+		int minY = 60;
 		
 		li = (LineGraph)findViewById(R.id.linegraph);
 		li.addLine(l);
