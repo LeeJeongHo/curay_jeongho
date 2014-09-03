@@ -19,6 +19,8 @@ public class BloodMainActivity extends ActionBarActivity {
 	LineGraph li;
 	/** 정상범위 표시를 위한 ImageView */
 	ImageView ivNormal;
+	/** 비정상범위 표시를 위한 ImageView */
+	ImageView ivAdnormal;
     /** 포인트를 클릭했을때 Tooltip 표시를 위한 영역 */
 	RelativeLayout rlTooltip;
 	
@@ -28,6 +30,7 @@ public class BloodMainActivity extends ActionBarActivity {
 		
 		setContentView(R.layout.activity_blood_main);
 		ivNormal = (ImageView)findViewById(R.id.iv_normal);
+		ivAdnormal = (ImageView)findViewById(R.id.iv_adnormal);
 		rlTooltip = (RelativeLayout)findViewById(R.id.rl_tooltip);
         initGraph();
 	}
@@ -41,30 +44,30 @@ public class BloodMainActivity extends ActionBarActivity {
 	private void initGraph(){
 		Line l = new Line();
 		LinePoint p = new LinePoint();
-		p.setX(0);
+		p.setX(0*60);
 		p.setY(100);
 		l.addPoint(p);
 		p = new LinePoint();
-		p.setX(8);
+		p.setX(8*60);
 		p.setY(110);
 		l.addPoint(p);
 		p = new LinePoint();
-		p.setX(10);
+		p.setX(10*60);
 		p.setY(400);
 		l.addPoint(p);
 		l.setColor(Color.parseColor("#5caecc"));
 		
 		Line l2 = new Line();
 		LinePoint p2 = new LinePoint();
-		p2.setX(0);
+		p2.setX(0*60);
 		p2.setY(125);
 		l2.addPoint(p2);
 		p2 = new LinePoint();
-		p2.setX(12);
+		p2.setX(12*60);
 		p2.setY(80);
 		l2.addPoint(p2);
 		p2 = new LinePoint();
-		p2.setX(15);
+		p2.setX(15*60);
 		p2.setY(190);
 		l2.addPoint(p2);
 		l2.setColor(Color.parseColor("#f5a700"));
@@ -76,7 +79,7 @@ public class BloodMainActivity extends ActionBarActivity {
 		li.addLine(l);
 		li.addLine(l2);
 		li.setRangeY(minY, maxY);
-		li.setMaxX(24.f);
+		li.setMaxX(24.f*60);
 		
 		li.setOnPointClickedListener(new OnPointClickedListener(){
 
@@ -91,6 +94,8 @@ public class BloodMainActivity extends ActionBarActivity {
 		
 		
 		setNormalRange(minY, maxY, 100, 125);
+		setAdnormalRange(minY, maxY, 0, 100);
+		setGoal(minY, maxY, 110);
 	}
 	
 	/**
@@ -110,6 +115,44 @@ public class BloodMainActivity extends ActionBarActivity {
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)iv_normal_height);
 		rlParams.setMargins(toPix(40), (int)(toPix(56)+((maxY-maxNormal)*per_height)), toPix(20), 0);
 		ivNormal.setLayoutParams(rlParams);
+	}
+
+	/**
+	 * Graph에 비정상범위 표시.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.03
+	 * @param minY Y 범위의 최소값.
+	 * @param maxY Y 범위의 최대값.
+	 * @param minNormal 정상범위의 최소값.
+	 * @param maxNormal 정상범위의 최대값.
+	 */
+	private void setAdnormalRange(int minY, int maxY, int minAdnormal, int maxAdnormal) {
+		if(minY > minAdnormal){
+			minAdnormal = minY;
+		}
+		if(maxY < maxAdnormal){
+			maxAdnormal = maxY;
+		}
+		int px_height = toPix(150);
+		float per_height = (float)px_height / (maxY - minY);
+		float iv_adnormal_height = per_height * (maxAdnormal-minAdnormal);
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)iv_adnormal_height);
+		rlParams.setMargins(toPix(40), (int)(toPix(56)+((maxY-maxAdnormal)*per_height)), toPix(20), 0);
+		ivAdnormal.setLayoutParams(rlParams);
+	}
+	
+	private void setGoal(int minY, int maxY, int value){
+		/** 목표 표시를 위한 View */
+		RelativeLayout rlGoal = (RelativeLayout)findViewById(R.id.ll_goal);
+
+		int px_height = toPix(150);
+		float per_height = (float)px_height / (maxY - minY);
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, toPix(15));
+		rlParams.setMargins(toPix(40), (int)(toPix(56-15)+((maxY-value)*per_height)), toPix(20), 0);
+		rlGoal.setLayoutParams(rlParams);
+		TextView tvGoal = (TextView)findViewById(R.id.tv_goal);
+		tvGoal.setText(value+" mg/dL");
 	}
 	
 	/**
@@ -131,6 +174,7 @@ public class BloodMainActivity extends ActionBarActivity {
         tvTooltip.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         tvTooltip.setTextColor(0xff424242);
         tvTooltip.setBackgroundColor(0xffbcbc00);
+        tvTooltip.setPadding(10, 0, 10, 0);
         rlTooltip.addView(tvTooltip);
 	}
 	

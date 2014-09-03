@@ -82,6 +82,15 @@
                     android:layout_marginTop="56dp"
                     android:background="#ebf4f7" />
 
+                <ImageView
+                    android:id="@+id/iv_adnormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="56dp"
+                    android:background="#fcf4e1" />
+
                 <com.echo.holographlibrary.LineGraph
                     android:id="@+id/linegraph"
                     android:layout_width="match_parent"
@@ -99,6 +108,30 @@
                     android:layout_marginBottom="30dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp" />
+
+                <RelativeLayout
+                    android:id="@+id/ll_goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="56dp"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tv_goal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="#78adcc"
+                        android:textSize="10sp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="#78adcc" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/ll_graph_x_label"
