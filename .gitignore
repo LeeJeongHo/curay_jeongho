@@ -12,8 +12,9 @@
 bin/
 gen/
 
-# library .rar
-*.rar
+# library generated files
+lib_proj/HoloGraphLibrary/bin/
+lib_proj/HoloGraphLibrary/gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
