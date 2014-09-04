@@ -12,6 +12,9 @@
 bin/
 gen/
 
+# library .rar
+*.rar
+
 # Local configuration file (sdk path, etc)
 local.properties
 
