@@ -177,7 +177,7 @@ public class WorkoutMainActivity extends ActionBarActivity {
 		tvTooltip.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		tvTooltip.setTextColor(Color.WHITE);
 		tvTooltip.setBackgroundColor(Color.GRAY);
-		tvTooltip.setGravity(Gravity.CENTER);
+		tvTooltip.setPadding(10, 0, 10, 0);
 		rlTooltip.addView(tvTooltip);
 	}
 
