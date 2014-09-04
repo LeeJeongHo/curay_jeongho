@@ -23,6 +23,10 @@ public class WorkoutMainActivity extends ActionBarActivity {
 	final static int dateFlagWeek = 7;
 	final static int dateFlagMonth = 28;
 	final static int dateFlagYear = 12;
+	
+	/** graph 의 색상 값. */
+	final static String colorOver = "#d6d138";
+	final static String colorDefault = "#5aaecc";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +54,6 @@ public class WorkoutMainActivity extends ActionBarActivity {
 		tvHalfY.setText("" + (((maxValue - minValue) / 2) + minValue));
 		tvMinY.setText("" + minValue);
 
-		String colorOver = "#d6d138";
-		String colorDefault = "#5aaecc";
 		final ArrayList<Bar> points = new ArrayList<Bar>();
 		Bar d1 = new Bar();
 		d1.setColor(Color.parseColor(colorOver));
@@ -146,7 +148,7 @@ public class WorkoutMainActivity extends ActionBarActivity {
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, toPix(15));
 		rlParams.setMargins(toPix(40),
-				(int) (toPix(56 - 15) + ((maxY - value) * per_height)),
+				(int) (toPix(50 - 15) + ((maxY - value) * per_height)),
 				toPix(20), 0);
 		rlGoal.setLayoutParams(rlParams);
 		TextView tvGoal = (TextView) findViewById(R.id.tv_goal);

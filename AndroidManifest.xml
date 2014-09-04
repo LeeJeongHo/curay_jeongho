@@ -32,7 +32,13 @@
         </activity>
         <activity
             android:name=".WorkoutMainActivity"
-            android:label="@string/title_activity_workout_main" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".PressureMainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

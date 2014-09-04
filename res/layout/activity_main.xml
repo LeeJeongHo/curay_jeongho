@@ -29,6 +29,11 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:text="workout_main" />
+            <Button
+                android:id="@+id/btn_pressure_main"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="pressure_main" />
         </LinearLayout>
     </ScrollView>
 

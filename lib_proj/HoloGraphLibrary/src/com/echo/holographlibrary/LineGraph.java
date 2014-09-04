@@ -406,11 +406,17 @@ public class LineGraph extends View {
 						
 						/**
 						 * 포인트의 색상을 line 색과 동일하게 표현되도록 변경.
+						 * 혈압일 경우 두번째 포인트의 색상을 변경.
 						 * 
 						 * @author leejeongho
 						 * @since 2014.09.03
 						 */
-						paint.setColor(line.getColor());
+						if(line.isPressure() && (pointCount%2) == 1){
+							paint.setColor(line.getColorPressure());
+						}
+						else{
+							paint.setColor(line.getColor());
+						}
 						canvas.drawCircle(xPixels, yPixels, 10, paint);
 						paint.setColor(Color.WHITE);
 						canvas.drawCircle(xPixels, yPixels, 5, paint);

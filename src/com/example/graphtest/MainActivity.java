@@ -15,11 +15,13 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 							
-	    Button btn_blood = (Button)findViewById(R.id.btn_blood_main);
-	    Button btn_workout = (Button)findViewById(R.id.btn_workout_main);
+	    Button btnBlood = (Button)findViewById(R.id.btn_blood_main);
+	    Button btnWorkout = (Button)findViewById(R.id.btn_workout_main);
+	    Button btnPressure = (Button)findViewById(R.id.btn_pressure_main);
 	    
-		btn_blood.setOnClickListener(mClick);
-		btn_workout.setOnClickListener(mClick);
+		btnBlood.setOnClickListener(mClick);
+		btnWorkout.setOnClickListener(mClick);
+		btnPressure.setOnClickListener(mClick);
 	}
 	
 	OnClickListener mClick = new OnClickListener() {
@@ -34,6 +36,10 @@ public class MainActivity extends ActionBarActivity {
 				break;
 			case R.id.btn_workout_main:
 				startActivity(new Intent(getApplicationContext(), com.example.graphtest.WorkoutMainActivity.class)
+				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP));
+				break;
+			case R.id.btn_pressure_main:
+				startActivity(new Intent(getApplicationContext(), com.example.graphtest.PressureMainActivity.class)
 				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP));
 				break;
 			default:

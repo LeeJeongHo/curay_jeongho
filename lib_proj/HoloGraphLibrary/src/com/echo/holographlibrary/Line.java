@@ -25,6 +25,7 @@ package com.echo.holographlibrary;
 
 import java.util.ArrayList;
 
+import android.graphics.*;
 import android.view.*;
 
 public class Line {
@@ -32,7 +33,9 @@ public class Line {
 	private ArrayList<LinePoint> points = new ArrayList<LinePoint>();
 	private ArrayList<Coordinates> coordinates = new ArrayList<Coordinates>();
 	private int color;
+	private int colorPressure = Color.parseColor("#02619c");
 	private boolean showPoints = true;
+	private boolean isPressure = false;
 
 	public int getColor() {
 		return color;
@@ -40,6 +43,14 @@ public class Line {
 
 	public void setColor(int color) {
 		this.color = color;
+	}
+	
+	public int getColorPressure() {
+		return colorPressure;
+	}
+
+	public void setColorPressure(int color) {
+		this.colorPressure = color;
 	}
 
 	public ArrayList<LinePoint> getPoints() {
@@ -68,6 +79,14 @@ public class Line {
 
 	public void setShowingPoints(boolean showPoints) {
 		this.showPoints = showPoints;
+	}
+	
+	public boolean isPressure() {
+		return isPressure;
+	}
+
+	public void setIsPressure(boolean isPressure) {
+		this.isPressure = isPressure;
 	}
 
 	/**

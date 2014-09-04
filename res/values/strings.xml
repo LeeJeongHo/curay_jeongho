@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_blood_main">BloodMainActivity</string>
     <string name="title_activity_workout_main">WorkoutMainActivity</string>
+    <string name="title_activity_pressure_main">PressureMainActivity</string>
 
 </resources>
