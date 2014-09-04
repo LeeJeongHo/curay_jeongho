@@ -420,7 +420,7 @@ public class LineGraph extends View {
 						 * @author leejeongho
 						 * @since 2014.09.03
 						 */
-						line.addCoordinate(xPixels, yPixels, p.getY());
+						line.addCoordinate(xPixels, yPixels, p.getY(), 0);
 						
 						Path path2 = new Path();
 						path2.addCircle(xPixels, yPixels, 30, Direction.CW);

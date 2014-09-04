@@ -18,7 +18,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_graph_root"
-                android:layout_width="348dp"
+                android:layout_width="332dp"
                 android:layout_height="236dp"
                 android:layout_marginTop="8dp"
                 android:background="#ffffff" >
@@ -52,16 +52,7 @@
                     android:layout_marginRight="20dp" />
 
                 <RelativeLayout
-                    android:id="@+id/rl_tooltip"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="20dp" />
-
-                <RelativeLayout
-                    android:id="@+id/ll_goal"
+                    android:id="@+id/rl_goal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="40dp"
@@ -85,13 +76,23 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/rl_graph_x_label"
+                    android:id="@+id/rl_tooltip"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="20dp" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_graph_x_label_day"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="40dp"
-                    android:layout_marginRight="30dp" >
+                    android:layout_marginRight="30dp"
+                    android:visibility="invisible" >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -116,6 +117,74 @@
                         android:textColor="#424242"
                         android:textSize="10sp" />
                 </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_graph_x_label_week"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="20dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:visibility="invisible" >
+
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="34dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/rl_graph_y_label"

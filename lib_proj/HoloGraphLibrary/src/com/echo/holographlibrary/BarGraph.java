@@ -155,6 +155,7 @@ public class BarGraph extends View {
                 this.p.setAlpha(255);
                 canvas.drawRect(r, this.p);
                 this.p.setTextSize(20);
+                /** x축 Label 을 커스텀하기위해 그리지 않음. */
 //                canvas.drawText(p.getName(), (int) (((r.left + r.right) / 2) - (this.p.measureText(p.getName()) / 2)), getHeight() - 5, this.txtPaint);
                 if (showBarText) {
                     this.p.setTextSize(40);
@@ -168,6 +169,13 @@ public class BarGraph extends View {
                     else
                         canvas.drawText(unit + p.getValue(), (int) (((r.left + r.right) / 2) - (this.p.measureText(unit + p.getValue()) / 2)), r.top - 20, this.p);
                 }
+                /** 
+				 * Tooltip 표시를 위해 포인트마다 좌표와 값을 저장.
+				 * 
+				 * @author leejeongho
+				 * @since 2014.09.04
+				 */
+                p.addCoordinate((int)r.left, r.top-20, p.getValue(), (int)barWidth);
                 if (indexSelected == count && listener != null) {
                     this.p.setColor(Color.parseColor("#33B5E5"));
                     this.p.setAlpha(100);
