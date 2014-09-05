@@ -103,7 +103,6 @@ public class BloodMainActivity extends ActionBarActivity {
 		li.setRangeY(minY, maxY);
 
 		int maxX = dateFlag;
-		int maxI = maxX;
 		int increaseValue = 1;
 		
 		switch(dateFlag){
@@ -112,7 +111,6 @@ public class BloodMainActivity extends ActionBarActivity {
 			li.setMaxX(maxX);
 			break;
 		case dateFlagWeek:
-			maxI = maxX+1;
 			li.setMaxX(maxX+1);
 			break;
 		default:
@@ -122,7 +120,7 @@ public class BloodMainActivity extends ActionBarActivity {
 		
 		Line lineAfter = new Line();
 		Line lineBefore = new Line();
-		for(int i=1;i<=maxI;i+=increaseValue){
+		for(int i=1;i<=maxX;i+=increaseValue){
 			if(((int)(Math.random()*maxX)%2)==0){
 				float value = (float)(minY + Math.random()*(maxY-minY));
 				LinePoint p = new LinePoint();
@@ -134,7 +132,7 @@ public class BloodMainActivity extends ActionBarActivity {
 		}
 		li.addLine(lineAfter);
 
-		for(int i=1;i<=maxI;i+=increaseValue){
+		for(int i=1;i<=maxX;i+=increaseValue){
 			if(((int)(Math.random()*maxX)%2)==0){
 				float value = (float)(minY + Math.random()*(maxY-minY));
 				LinePoint p = new LinePoint();

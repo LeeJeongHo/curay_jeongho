@@ -20,12 +20,14 @@ public class MainActivity extends ActionBarActivity {
 	    Button btnPressure = (Button)findViewById(R.id.btn_pressure_main);
 	    Button btnFood = (Button)findViewById(R.id.btn_food_main);
 	    Button btnMedicine = (Button)findViewById(R.id.btn_medicine_main);
+	    Button btnWeight = (Button)findViewById(R.id.btn_weight_main);
 	    
 		btnBlood.setOnClickListener(mClick);
 		btnWorkout.setOnClickListener(mClick);
 		btnPressure.setOnClickListener(mClick);
 		btnFood.setOnClickListener(mClick);
 		btnMedicine.setOnClickListener(mClick);
+		btnWeight.setOnClickListener(mClick);
 	}
 	
 	OnClickListener mClick = new OnClickListener() {
@@ -52,6 +54,10 @@ public class MainActivity extends ActionBarActivity {
 				break;
 			case R.id.btn_medicine_main:
 				startActivity(new Intent(getApplicationContext(), com.example.graphtest.MedicineMainActivity.class)
+				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP));
+				break;
+			case R.id.btn_weight_main:
+				startActivity(new Intent(getApplicationContext(), com.example.graphtest.WeightMainActivity.class)
 				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP));
 				break;
 			default:

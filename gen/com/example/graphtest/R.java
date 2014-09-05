@@ -1096,7 +1096,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050060;
+        public static final int action_settings=0x7f050061;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int bargraph=0x7f050053;
@@ -1108,6 +1108,7 @@ containing a value of this type.
         public static final int btn_month=0x7f050051;
         public static final int btn_pressure_main=0x7f050058;
         public static final int btn_week=0x7f050050;
+        public static final int btn_weight_main=0x7f05005b;
         public static final int btn_workout_main=0x7f050057;
         public static final int btn_year=0x7f050052;
         public static final int checkbox=0x7f05002d;
@@ -1128,11 +1129,11 @@ containing a value of this type.
         public static final int iv_adnormal=0x7f050044;
         public static final int iv_legend_after=0x7f050040;
         public static final int iv_legend_before=0x7f050042;
-        public static final int iv_legend_contract=0x7f05005b;
-        public static final int iv_legend_relax=0x7f05005d;
+        public static final int iv_legend_contract=0x7f05005c;
+        public static final int iv_legend_relax=0x7f05005e;
         public static final int iv_normal=0x7f050043;
-        public static final int iv_normal_contract=0x7f05005e;
-        public static final int iv_normal_relax=0x7f05005f;
+        public static final int iv_normal_contract=0x7f05005f;
+        public static final int iv_normal_relax=0x7f050060;
         public static final int linegraph=0x7f050045;
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f050029;
@@ -1176,7 +1177,7 @@ containing a value of this type.
         public static final int tv_goal=0x7f050055;
         public static final int tv_half_y=0x7f05004d;
         public static final int tv_legend_after=0x7f050041;
-        public static final int tv_legend_contract=0x7f05005c;
+        public static final int tv_legend_contract=0x7f05005d;
         public static final int tv_max_y=0x7f05004c;
         public static final int tv_min_y=0x7f05004e;
         public static final int up=0x7f050021;
@@ -1238,8 +1239,9 @@ containing a value of this type.
         public static final int activity_main=0x7f03001a;
         public static final int activity_medicine_main=0x7f03001b;
         public static final int activity_pressure_main=0x7f03001c;
-        public static final int activity_workout_main=0x7f03001d;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
+        public static final int activity_weight_main=0x7f03001d;
+        public static final int activity_workout_main=0x7f03001e;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
     }
     public static final class menu {
         public static final int blood_main=0x7f0c0000;
@@ -1247,7 +1249,8 @@ containing a value of this type.
         public static final int main=0x7f0c0002;
         public static final int medicine_main=0x7f0c0003;
         public static final int pressure_main=0x7f0c0004;
-        public static final int workout_main=0x7f0c0005;
+        public static final int weight_main=0x7f0c0005;
+        public static final int workout_main=0x7f0c0006;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1297,6 +1300,7 @@ containing a value of this type.
         public static final int title_activity_food_main=0x7f0a0013;
         public static final int title_activity_medicine_main=0x7f0a0014;
         public static final int title_activity_pressure_main=0x7f0a0012;
+        public static final int title_activity_weight_main=0x7f0a0015;
         public static final int title_activity_workout_main=0x7f0a0011;
     }
     public static final class style {

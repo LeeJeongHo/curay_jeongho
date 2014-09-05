@@ -15,13 +15,13 @@ import android.view.View.*;
 import android.widget.*;
 import android.widget.RelativeLayout.*;
 
-public class PressureMainActivity extends ActionBarActivity {
+public class WeightMainActivity extends ActionBarActivity {
 	/** Graph 를 그리는 Canvas 영역 */
 	LineGraph li;
-	/** 수축기 정상범위 표시를 위한 ImageView */
-	ImageView ivNormalContract;
-	/** 이완기 정상범위 표시를 위한 ImageView */
-	ImageView ivNormalRelax;
+	/** 정상범위 표시를 위한 ImageView */
+	ImageView ivNormal;
+	/** 비정상범위 표시를 위한 ImageView */
+	ImageView ivAdnormal;
 	/** 포인트를 클릭했을때 Tooltip 표시를 위한 영역 */
 	RelativeLayout rlTooltip;
 
@@ -32,18 +32,15 @@ public class PressureMainActivity extends ActionBarActivity {
 	final static int dateFlagYear = 12;
 
 	/** graph 의 색상 값. */
-	final static String colorContract = "#5aaccc";
-	final static String colorRelax = "#02619c";
-
-	// final static String colorRelax = "#ff0000";
+	final static String colorWeight = "#5aaccc";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pressure_main);
+		setContentView(R.layout.activity_weight_main);
 
-		ivNormalContract = (ImageView) findViewById(R.id.iv_normal_contract);
-		ivNormalRelax = (ImageView) findViewById(R.id.iv_normal_relax);
+		ivNormal = (ImageView) findViewById(R.id.iv_normal);
+		ivAdnormal = (ImageView) findViewById(R.id.iv_adnormal);
 		rlTooltip = (RelativeLayout) findViewById(R.id.rl_tooltip);
 		initGraph(dateFlagWeek);
 
@@ -80,16 +77,16 @@ public class PressureMainActivity extends ActionBarActivity {
 	};
 
 	/**
-	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정.
-	 * **주, 월 , 년 일때는 x축의 시작과 끝값을 사용안함.
+	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정. **주, 월 , 년
+	 * 일때는 x축의 시작과 끝값을 사용안함.
 	 * 
 	 * @author leejeongho
 	 * @since 2014.09.02
 	 */
 	private void initGraph(int dateFlag) {
-
-		int maxY = 180;
-		int minY = 80;
+		int maxY = 80;
+		int minY = 50;
+		int goalValue = 70;
 
 		TextView tvMaxY = (TextView) findViewById(R.id.tv_max_y);
 		TextView tvHalfY = (TextView) findViewById(R.id.tv_half_y);
@@ -103,6 +100,7 @@ public class PressureMainActivity extends ActionBarActivity {
 		li.setRangeY(minY, maxY);
 
 		int maxX = dateFlag;
+		int maxI = maxX;
 		int increaseValue = 1;
 
 		switch (dateFlag) {
@@ -111,33 +109,26 @@ public class PressureMainActivity extends ActionBarActivity {
 			li.setMaxX(maxX);
 			break;
 		case dateFlagWeek:
+			maxI = maxX + 1;
 			li.setMaxX(maxX + 1);
 			break;
 		default:
-			li.setMaxX(maxX+1);
+			li.setMaxX(maxX + 1);
 			break;
 		}
 
-		ArrayList<Line> arrLine = new ArrayList<Line>();
-		int index = 0;
-		for (int i = 1; i <= maxX; i += increaseValue) {
-				arrLine.add(new Line());
+		Line lineWeight = new Line();
+		for (int i = 1; i <= maxI; i += increaseValue) {
+			if (((int) (Math.random() * maxX) % 2) == 0) {
+				float value = (float) (goalValue-10 + Math.random() * 20);
 				LinePoint p = new LinePoint();
 				p.setX(i);
-				p.setY(150);
-				arrLine.get(index).addPoint(p);
-				p = new LinePoint();
-				p.setX(i);
-				p.setY(110);
-				arrLine.get(index).addPoint(p);
-				arrLine.get(index).setColor(Color.parseColor(colorContract));
-				arrLine.get(index).setIsPressure(true);
-				arrLine.get(index).setColorPressure(
-						Color.parseColor(colorRelax));
-
-				li.addLine(arrLine.get(index));
-				index++;
+				p.setY(value);
+				lineWeight.addPoint(p);
+				lineWeight.setColor(Color.parseColor(colorWeight));
+			}
 		}
+		li.addLine(lineWeight);
 
 		li.setOnPointClickedListener(new OnPointClickedListener() {
 
@@ -149,71 +140,10 @@ public class PressureMainActivity extends ActionBarActivity {
 			}
 		});
 
-		setNormalContractRange(minY, maxY, 120, 150);
-		setNormalRelaxRange(minY, maxY, 90, 110);
+		setGoal(minY, maxY, goalValue);
 		setXLabel(dateFlag);
-	}
 
-	/**
-	 * Graph에 수축기 정상범위 표시.
-	 * 
-	 * @author leejeongho
-	 * @since 2014.09.04
-	 * @param minY
-	 *            Y 범위의 최소값.
-	 * @param maxY
-	 *            Y 범위의 최대값.
-	 * @param minNormalContract
-	 *            정상범위의 최소값.
-	 * @param maxNormalContract
-	 *            정상범위의 최대값.
-	 */
-	private void setNormalContractRange(int minY, int maxY,
-			int minNormalContract, int maxNormalContract) {
-		int px_height = toPix(150);
-		float per_height = (float) px_height / (maxY - minY);
-		float iv_normal_height = per_height
-				* (maxNormalContract - minNormalContract);
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, (int) iv_normal_height);
-		rlParams.setMargins(toPix(34),
-				(int) (toPix(50) + ((maxY - maxNormalContract) * per_height)),
-				toPix(20), 0);
-		ivNormalContract.setLayoutParams(rlParams);
-	}
-
-	/**
-	 * Graph에 이완기 정상범위 표시.
-	 * 
-	 * @author leejeongho
-	 * @since 2014.09.04
-	 * @param minY
-	 *            Y 범위의 최소값.
-	 * @param maxY
-	 *            Y 범위의 최대값.
-	 * @param minNormalRelax
-	 *            정상범위의 최소값.
-	 * @param maxNormalRelax
-	 *            정상범위의 최대값.
-	 */
-	private void setNormalRelaxRange(int minY, int maxY, int minNormalRelax,
-			int maxNormalRelax) {
-		if (minY > minNormalRelax) {
-			minNormalRelax = minY;
-		}
-		if (maxY < maxNormalRelax) {
-			maxNormalRelax = maxY;
-		}
-		int px_height = toPix(150);
-		float per_height = (float) px_height / (maxY - minY);
-		float iv_adnormal_height = per_height
-				* (maxNormalRelax - minNormalRelax);
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, (int) iv_adnormal_height);
-		rlParams.setMargins(toPix(34),
-				(int) (toPix(50) + ((maxY - maxNormalRelax) * per_height)),
-				toPix(20), 0);
-		ivNormalRelax.setLayoutParams(rlParams);
+		li.update();
 	}
 
 	/**
@@ -275,12 +205,13 @@ public class PressureMainActivity extends ActionBarActivity {
 			ArrayList<TextView> arrLabelMonth = new ArrayList<TextView>();
 			for (int i = 0; i < 9; i++) {
 				arrLabelMonth.add((TextView) llXLabelMonth.getChildAt(i));
-				if (i==0){
-					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+				if (i == 0) {
+					arrLabelMonth.get(i).setText(
+							mDate.get(Calendar.DAY_OF_MONTH) + "");
 					mDate.add(Calendar.DAY_OF_MONTH, 6);
-				}
-				else if (i % 2 == 0) {
-					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+				} else if (i % 2 == 0) {
+					arrLabelMonth.get(i).setText(
+							mDate.get(Calendar.DAY_OF_MONTH) + "");
 					mDate.add(Calendar.DAY_OF_MONTH, 7);
 				}
 			}
@@ -304,11 +235,39 @@ public class PressureMainActivity extends ActionBarActivity {
 	}
 
 	/**
+	 * Graph에 목표수치 표시.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.05
+	 * @param minY
+	 *            Y 범위의 최소값.
+	 * @param maxY
+	 *            Y 범위의 최대값.
+	 * @param value
+	 *            목표수치 값.
+	 */
+	private void setGoal(int minY, int maxY, int value) {
+		/** 목표 표시를 위한 별도의 View */
+		RelativeLayout rlGoal = (RelativeLayout) findViewById(R.id.rl_goal);
+
+		int px_height = toPix(150);
+		float per_height = (float) px_height / (maxY - minY);
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, toPix(15));
+		rlParams.setMargins(toPix(35),
+				(int) (toPix(50 - 15) + ((maxY - value) * per_height)),
+				toPix(20), 0);
+		rlGoal.setLayoutParams(rlParams);
+		TextView tvGoal = (TextView) findViewById(R.id.tv_goal);
+		tvGoal.setText(value + " kcal");
+	}
+
+	/**
 	 * 포인트를 클릭했을때 값을 표시. ** 라이브러리에서 포인트를 그려넣을때의 Pixel좌표를 그대로 사용하므로 dip 변환을 안해도됨.
 	 * **
 	 * 
 	 * @author leejeongho
-	 * @since 2014.09.04
+	 * @since 2014.09.03
 	 * @param coordinates
 	 *            {@link Coordinates}
 	 */
@@ -333,7 +292,7 @@ public class PressureMainActivity extends ActionBarActivity {
 	 * DIP 수치를 Pixel 수치로 변환. 동적으로 View를 그려넣을때 필요.
 	 * 
 	 * @author leejeongho
-	 * @since 2014.09.04
+	 * @since 2014.09.05
 	 * @param value
 	 *            변환할 DIP 수치.
 	 * @return 변환된 Pixel 수치.
@@ -343,24 +302,5 @@ public class PressureMainActivity extends ActionBarActivity {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
 				value, getApplicationContext().getResources()
 						.getDisplayMetrics());
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.pressure_main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }
