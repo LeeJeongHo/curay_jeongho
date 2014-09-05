@@ -62,7 +62,17 @@ public class BarGraph extends View {
 		txtPaint.setTextSize(35);
 		txtPaint.setAntiAlias(true);
     }
-
+    /** 
+     * LineGraph에만 있던 Update 를 추가.
+     * 
+     * @author leejeongho
+     * @since 2014.09.05
+     */
+    public void update()
+	{
+		shouldUpdate = true;
+		postInvalidate();
+	}
     public void setShowBarText(boolean show) {
         showBarText = show;
     }
@@ -83,9 +93,25 @@ public class BarGraph extends View {
     public void appendUnit(Boolean doAppend) {
         this.append = doAppend;
     }
+    
+    /**
+     * y축 value의 최대값 설정.
+     * 
+     * @author leejeongho
+     * @since 2014.09.04
+     * @param value y축 최대값.
+     */
     public void setMaxValue(float value){
     	this.maxValue = value;
     }
+    
+    /**
+     * 설정된 y축 최대값을 반환.
+     * 
+     * @author leejeongho
+     * @since 2014.09.04
+     * @return 설정된 y축 최대값.
+     */
     public float getMaxValue(){
     	return this.maxValue;
     }
@@ -126,13 +152,14 @@ public class BarGraph extends View {
             p.setAlpha(50);
             p.setAntiAlias(true);
 
-            /* GridLine */
+            /** GridLine */
             canvas.drawLine(0, getHeight() - bottomPadding, getWidth(), getHeight() - bottomPadding, p);
             canvas.drawLine(0, (getHeight() - bottomPadding)/2, getWidth(), (getHeight() - bottomPadding)/2, p);
 			canvas.drawLine(0, bottomPadding, getWidth(), bottomPadding, p);
 
             float barWidth = (getWidth() - (padding * 2) * points.size()) / points.size();
 
+            /** maxValue 설정 변경. 기존에는 누적 */
             maxValue = getMaxValue();
 /*            
             for (Bar p : points) {
@@ -230,3 +257,4 @@ public class BarGraph extends View {
         abstract void onClick(int index);
     }
 }
+ 

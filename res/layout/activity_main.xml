@@ -23,17 +23,30 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:text="blood_main" />
-            
+
             <Button
                 android:id="@+id/btn_workout_main"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:text="workout_main" />
+
             <Button
                 android:id="@+id/btn_pressure_main"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:text="pressure_main" />
+
+            <Button
+                android:id="@+id/btn_food_main"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="food_main" />
+
+            <Button
+                android:id="@+id/btn_medicine_main"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="medicine_main" />
         </LinearLayout>
     </ScrollView>
 

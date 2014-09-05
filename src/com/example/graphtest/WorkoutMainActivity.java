@@ -11,19 +11,20 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.util.*;
 import android.view.*;
+import android.view.View.OnClickListener;
 import android.widget.*;
 import android.widget.RelativeLayout.*;
 
 public class WorkoutMainActivity extends ActionBarActivity {
 	/** 포인트를 클릭했을때 Tooltip 표시를 위한 영역 */
 	RelativeLayout rlTooltip;
-	
+
 	/** graph 의 x축 범위를 지정하기 위한 flag */
 	final static int dateFlagDay = 24;
 	final static int dateFlagWeek = 7;
 	final static int dateFlagMonth = 28;
 	final static int dateFlagYear = 12;
-	
+
 	/** graph 의 색상 값. */
 	final static String colorOver = "#d6d138";
 	final static String colorDefault = "#5aaecc";
@@ -34,7 +35,38 @@ public class WorkoutMainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_workout_main);
 		rlTooltip = (RelativeLayout) findViewById(R.id.rl_tooltip);
 		initGraph(dateFlagWeek);
+
+		Button btnDay = (Button) findViewById(R.id.btn_day);
+		Button btnWeek = (Button) findViewById(R.id.btn_week);
+		Button btnMonth = (Button) findViewById(R.id.btn_month);
+		Button btnYear = (Button) findViewById(R.id.btn_year);
+		btnDay.setOnClickListener(mClick);
+		btnWeek.setOnClickListener(mClick);
+		btnMonth.setOnClickListener(mClick);
+		btnYear.setOnClickListener(mClick);
 	}
+
+	OnClickListener mClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			rlTooltip.removeAllViews();
+			switch (v.getId()) {
+			case R.id.btn_day:
+				initGraph(dateFlagDay);
+				break;
+			case R.id.btn_week:
+				initGraph(dateFlagWeek);
+				break;
+			case R.id.btn_month:
+				initGraph(dateFlagMonth);
+				break;
+			case R.id.btn_year:
+				initGraph(dateFlagYear);
+				break;
+			}
+		}
+	};
 
 	/**
 	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정.
@@ -75,7 +107,6 @@ public class WorkoutMainActivity extends ActionBarActivity {
 		}
 
 		BarGraph g = (BarGraph) findViewById(R.id.bargraph);
-
 		g.setMaxValue(maxValue);
 		g.setBars(points);
 
@@ -83,14 +114,15 @@ public class WorkoutMainActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(int index) {
-			    Coordinates coordinates = points.get(index).getCoordinates();
-			    addTooltip(coordinates);
+				Coordinates coordinates = points.get(index).getCoordinates();
+				addTooltip(coordinates);
 			}
 
 		});
 
 		setGoal(minValue, maxValue, goalValue);
 		setXLabel(dateFlag);
+		g.update();
 	}
 
 	/**
@@ -98,30 +130,83 @@ public class WorkoutMainActivity extends ActionBarActivity {
 	 * 
 	 * @author leejeongho
 	 * @since 2014.09.04
-	 * @param flag x축에 대한 단위. Day: 24, Week: 7, Month: 28, Year: 12
+	 * @param flag
+	 *            x축에 대한 단위. Day: 24, Week: 7, Month: 28, Year: 12
 	 */
 	private void setXLabel(int flag) {
 		Calendar mDate = Calendar.getInstance();
 		TextView tvDate = (TextView) findViewById(R.id.tv_date);
+		RelativeLayout rlXLabelDay = (RelativeLayout) findViewById(R.id.rl_graph_x_label_day);
+		LinearLayout llXLabelWeek = (LinearLayout) findViewById(R.id.ll_graph_x_label_week);
+		LinearLayout llXLabelMonth = (LinearLayout) findViewById(R.id.ll_graph_x_label_month);
+		LinearLayout llXLabelYear = (LinearLayout) findViewById(R.id.ll_graph_x_label_year);
 		switch (flag) {
 		case dateFlagDay:
 			tvDate.setText(DateFormat.format("MM월 dd일", mDate.getTime()));
-			RelativeLayout rlXLabelDay = (RelativeLayout) findViewById(R.id.rl_graph_x_label_day);
 			rlXLabelDay.setVisibility(View.VISIBLE);
+			llXLabelWeek.setVisibility(View.INVISIBLE);
+			llXLabelMonth.setVisibility(View.INVISIBLE);
+			llXLabelYear.setVisibility(View.INVISIBLE);
 			break;
 		case dateFlagWeek:
-			String dateEnd = (String)DateFormat.format("MM월 dd일", mDate.getTime());
+			String dateEndWeek = (String) DateFormat.format("MM월 dd일",
+					mDate.getTime());
 			mDate.add(Calendar.DAY_OF_MONTH, -6);
-			String dateStart = (String)DateFormat.format("MM월 dd일 - ", mDate.getTime());
-			tvDate.setText(dateStart+dateEnd);
-			
-			LinearLayout llXLabelWeek = (LinearLayout) findViewById(R.id.ll_graph_x_label_week);
+			String dateStartWeek = (String) DateFormat.format("MM월 dd일 - ",
+					mDate.getTime());
+			tvDate.setText(dateStartWeek + dateEndWeek);
+
+			rlXLabelDay.setVisibility(View.INVISIBLE);
 			llXLabelWeek.setVisibility(View.VISIBLE);
-			ArrayList<TextView> arrLabels = new ArrayList<TextView>();
+			llXLabelMonth.setVisibility(View.INVISIBLE);
+			llXLabelYear.setVisibility(View.INVISIBLE);
+
+			ArrayList<TextView> arrLabelWeek = new ArrayList<TextView>();
 			for (int i = 0; i < 7; i++) {
-				arrLabels.add((TextView) llXLabelWeek.getChildAt(i));
-				arrLabels.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+				arrLabelWeek.add((TextView) llXLabelWeek.getChildAt(i));
+				arrLabelWeek.get(i).setText(
+						mDate.get(Calendar.DAY_OF_MONTH) + "");
 				mDate.add(Calendar.DAY_OF_MONTH, 1);
+			}
+			break;
+		case dateFlagMonth:
+			String dateEndMonth = (String) DateFormat.format("MM월 dd일",
+					mDate.getTime());
+			mDate.add(Calendar.DAY_OF_MONTH, -27);
+			String dateStartMonth = (String) DateFormat.format("MM월 dd일 - ",
+					mDate.getTime());
+			tvDate.setText(dateStartMonth + dateEndMonth);
+
+			rlXLabelDay.setVisibility(View.INVISIBLE);
+			llXLabelWeek.setVisibility(View.INVISIBLE);
+			llXLabelMonth.setVisibility(View.VISIBLE);
+			llXLabelYear.setVisibility(View.INVISIBLE);
+			ArrayList<TextView> arrLabelMonth = new ArrayList<TextView>();
+			for (int i = 0; i < 9; i++) {
+				arrLabelMonth.add((TextView) llXLabelMonth.getChildAt(i));
+				if (i==0){
+					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+					mDate.add(Calendar.DAY_OF_MONTH, 6);
+				}
+				else if (i % 2 == 0) {
+					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+					mDate.add(Calendar.DAY_OF_MONTH, 7);
+				}
+			}
+			break;
+		case dateFlagYear:
+			tvDate.setText(mDate.get(Calendar.YEAR) + "년");
+			rlXLabelDay.setVisibility(View.INVISIBLE);
+			llXLabelWeek.setVisibility(View.INVISIBLE);
+			llXLabelMonth.setVisibility(View.INVISIBLE);
+			llXLabelYear.setVisibility(View.VISIBLE);
+			mDate.add(Calendar.MONTH, -11);
+			ArrayList<TextView> arrLabelYear = new ArrayList<TextView>();
+			for (int i = 0; i < 12; i++) {
+				arrLabelYear.add((TextView) llXLabelYear.getChildAt(i));
+				arrLabelYear.get(i).setText(
+						(mDate.get(Calendar.MONTH) + 1) + "");
+				mDate.add(Calendar.MONTH, 1);
 			}
 			break;
 		}
@@ -169,11 +254,11 @@ public class WorkoutMainActivity extends ActionBarActivity {
 
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		rlParams.setMargins((int) coordinates.getX(),
-				(int) coordinates.getY(), 0, 0);
+		rlParams.setMargins((int) coordinates.getX(), (int) coordinates.getY(),
+				0, 0);
 		TextView tvTooltip = new TextView(getApplicationContext());
 		tvTooltip.setLayoutParams(rlParams);
-		tvTooltip.setText("" + ((int)coordinates.getValue()));
+		tvTooltip.setText("" + ((int) coordinates.getValue()));
 		tvTooltip.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		tvTooltip.setTextColor(Color.WHITE);
 		tvTooltip.setBackgroundColor(Color.GRAY);

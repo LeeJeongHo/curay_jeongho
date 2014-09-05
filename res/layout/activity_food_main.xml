@@ -185,7 +185,8 @@
                         android:textColor="#424242"
                         android:textSize="10sp" />
                 </LinearLayout>
-
+                
+                
                 <LinearLayout
                     android:id="@+id/ll_graph_x_label_month"
                     android:layout_width="match_parent"
@@ -269,6 +270,7 @@
                         android:textColor="#424242"
                         android:textSize="10sp" />
                 </LinearLayout>
+                
 
                 <LinearLayout
                     android:id="@+id/ll_graph_x_label_year"

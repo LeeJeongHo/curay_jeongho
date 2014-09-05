@@ -123,8 +123,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rl_tooltip"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="22dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginTop="5dp"
                     android:visibility="invisible" >
 
@@ -157,63 +157,236 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rl_tooltip"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="48dp"
+                    android:layout_marginRight="42dp"
                     android:layout_marginTop="5dp"
                     android:visibility="invisible" >
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#424242"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#424242"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#424242"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#424242"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#424242"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="#424242"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="35dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_graph_x_label_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_tooltip"
+                    android:layout_marginLeft="28dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:visibility="invisible" >
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="17dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_graph_x_label_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_tooltip"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:visibility="invisible" >
+
+                    <TextView
+                        android:layout_width="21dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="21dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="21dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="21dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="21dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="21dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="#424242"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="#424242"
                         android:textSize="10sp" />
@@ -250,6 +423,30 @@
                         android:textSize="10sp" />
                 </RelativeLayout>
             </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_day"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Day" />
+
+            <Button
+                android:id="@+id/btn_week"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Week" />
+
+            <Button
+                android:id="@+id/btn_month"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Month" />
+
+            <Button
+                android:id="@+id/btn_year"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Year" />
         </LinearLayout>
     </ScrollView>
 

@@ -1,7 +1,9 @@
 package com.example.graphtest;
 
-import java.lang.Character.*;
 import java.util.*;
+
+import com.echo.holographlibrary.*;
+import com.echo.holographlibrary.BarGraph.*;
 
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.*;
@@ -11,42 +13,32 @@ import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.RelativeLayout.*;
 
-import com.echo.holographlibrary.*;
-import com.echo.holographlibrary.LineGraph.OnPointClickedListener;
-
-public class BloodMainActivity extends ActionBarActivity {
-	/** Graph 를 그리는 Canvas 영역 */
-	LineGraph li;
-	/** 정상범위 표시를 위한 ImageView */
-	ImageView ivNormal;
-	/** 비정상범위 표시를 위한 ImageView */
-	ImageView ivAdnormal;
+public class MedicineMainActivity extends ActionBarActivity {
 	/** 포인트를 클릭했을때 Tooltip 표시를 위한 영역 */
 	RelativeLayout rlTooltip;
 
 	/** graph 의 x축 범위를 지정하기 위한 flag */
-	final static int dateFlagDay = 24 * 60;
+	final static int dateFlagDay = 24;
 	final static int dateFlagWeek = 7;
 	final static int dateFlagMonth = 28;
 	final static int dateFlagYear = 12;
 
 	/** graph 의 색상 값. */
-	final static String colorBefore = "#f5aa00";
-	final static String colorAfter = "#5aaccc";
+	final static String colorBefore = "#5aaccc";
+	final static String colorAfter = "#ff8c9c";
+	final static String colorInsulin = "#f5a700";
+	final static String colorOutside = "#61bf52";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_medicine_main);
 
-		setContentView(R.layout.activity_blood_main);
-
-		ivNormal = (ImageView) findViewById(R.id.iv_normal);
-		ivAdnormal = (ImageView) findViewById(R.id.iv_adnormal);
 		rlTooltip = (RelativeLayout) findViewById(R.id.rl_tooltip);
 		initGraph(dateFlagDay);
-		
+
 		Button btnDay = (Button) findViewById(R.id.btn_day);
 		Button btnWeek = (Button) findViewById(R.id.btn_week);
 		Button btnMonth = (Button) findViewById(R.id.btn_month);
@@ -57,7 +49,6 @@ public class BloodMainActivity extends ActionBarActivity {
 		btnYear.setOnClickListener(mClick);
 	}
 
-	
 	OnClickListener mClick = new OnClickListener() {
 
 		@Override
@@ -79,154 +70,72 @@ public class BloodMainActivity extends ActionBarActivity {
 			}
 		}
 	};
-	
+
 	/**
 	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정.
-	 * **주, 월 , 년 일때는 x축의 시작과 끝값을 사용안함.
 	 * 
 	 * @author leejeongho
-	 * @since 2014.09.02
+	 * @since 2014.09.05
 	 */
 	private void initGraph(int dateFlag) {
-		int maxY = 300;
-		int minY = 60;
+		int maxValue = 2;
+		int minValue = 0;
 
 		TextView tvMaxY = (TextView) findViewById(R.id.tv_max_y);
 		TextView tvHalfY = (TextView) findViewById(R.id.tv_half_y);
 		TextView tvMinY = (TextView) findViewById(R.id.tv_min_y);
-		tvMaxY.setText("" + ((int) maxY));
-		tvHalfY.setText("" + ((int) (((maxY - minY) / 2) + minY)));
-		tvMinY.setText("" + ((int) minY));
+		tvMaxY.setText("" + maxValue);
+		tvHalfY.setText("" + (((maxValue - minValue) / 2) + minValue));
+		tvMinY.setText("" + minValue);
 
-		li = (LineGraph) findViewById(R.id.linegraph);
-		li.removeAllLines();
-		li.setRangeY(minY, maxY);
+		final ArrayList<Bar> points = new ArrayList<Bar>();
 
-		int maxX = dateFlag;
-		int maxI = maxX;
-		int increaseValue = 1;
-		
-		switch(dateFlag){
-		case dateFlagDay:
-			increaseValue = 60;
-			li.setMaxX(maxX);
-			break;
-		case dateFlagWeek:
-			maxI = maxX+1;
-			li.setMaxX(maxX+1);
-			break;
-		default:
-			li.setMaxX(maxX+1);
-			break;
-		}
-		
-		Line lineAfter = new Line();
-		Line lineBefore = new Line();
-		for(int i=1;i<=maxI;i+=increaseValue){
-			if(((int)(Math.random()*maxX)%2)==0){
-				float value = (float)(minY + Math.random()*(maxY-minY));
-				LinePoint p = new LinePoint();
-				p.setX(i);
-				p.setY(value);
-				lineAfter.addPoint(p);
-				lineAfter.setColor(Color.parseColor(colorAfter));
+		for (int i = 1; i <= dateFlag; i++) {
+			Bar d = new Bar();
+			int value = (int) (Math.random() * maxValue);
+			int colorFlag = (int)(Math.random()*4);
+			switch (colorFlag) {
+			case 0:
+				d.setColor(Color.parseColor(colorAfter));
+				break;
+			case 1:
+				d.setColor(Color.parseColor(colorBefore));
+				break;
+			case 2:
+				d.setColor(Color.parseColor(colorInsulin));
+				break;
+			case 3:
+				d.setColor(Color.parseColor(colorOutside));
+				break;
 			}
+			d.setName("" + i);
+			d.setValue(value);
+			points.add(d);
 		}
-		li.addLine(lineAfter);
 
-		for(int i=1;i<=maxI;i+=increaseValue){
-			if(((int)(Math.random()*maxX)%2)==0){
-				float value = (float)(minY + Math.random()*(maxY-minY));
-				LinePoint p = new LinePoint();
-				p.setX(i);
-				p.setY(value);
-				lineBefore.addPoint(p);
-				lineBefore.setColor(Color.parseColor(colorBefore));
-			}
-		}
-		li.addLine(lineBefore);
+		BarGraph g = (BarGraph) findViewById(R.id.bargraph);
+		g.setMaxValue(maxValue);
+		g.setBars(points);
 
-		li.setOnPointClickedListener(new OnPointClickedListener() {
+		g.setOnBarClickedListener(new OnBarClickedListener() {
 
 			@Override
-			public void onClick(int lineIndex, int pointIndex) {
-				Coordinates coordinates = li.getLine(lineIndex).getCoordinates(
-						pointIndex);
+			public void onClick(int index) {
+				Coordinates coordinates = points.get(index).getCoordinates();
 				addTooltip(coordinates);
 			}
+
 		});
 
-		setNormalRange(minY, maxY, 100, 125);
-		setAdnormalRange(minY, maxY, 0, 100);
 		setXLabel(dateFlag);
-		
-		li.update();
-	}
-
-	/**
-	 * Graph에 정상범위 표시.
-	 * 
-	 * @author leejeongho
-	 * @since 2014.09.03
-	 * @param minY
-	 *            Y 범위의 최소값.
-	 * @param maxY
-	 *            Y 범위의 최대값.
-	 * @param minNormal
-	 *            정상범위의 최소값.
-	 * @param maxNormal
-	 *            정상범위의 최대값.
-	 */
-	private void setNormalRange(int minY, int maxY, int minNormal, int maxNormal) {
-		int px_height = toPix(150);
-		float per_height = (float) px_height / (maxY - minY);
-		float iv_normal_height = per_height * (maxNormal - minNormal);
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, (int) iv_normal_height);
-		rlParams.setMargins(toPix(34),
-				(int) (toPix(50) + ((maxY - maxNormal) * per_height)),
-				toPix(20), 0);
-		ivNormal.setLayoutParams(rlParams);
-	}
-
-	/**
-	 * Graph에 비정상범위 표시.
-	 * 
-	 * @author leejeongho
-	 * @since 2014.09.03
-	 * @param minY
-	 *            Y 범위의 최소값.
-	 * @param maxY
-	 *            Y 범위의 최대값.
-	 * @param minAdnormal
-	 *            비정상범위의 최소값.
-	 * @param maxAdnormal
-	 *            비정상범위의 최대값.
-	 */
-	private void setAdnormalRange(int minY, int maxY, int minAdnormal,
-			int maxAdnormal) {
-		if (minY > minAdnormal) {
-			minAdnormal = minY;
-		}
-		if (maxY < maxAdnormal) {
-			maxAdnormal = maxY;
-		}
-		int px_height = toPix(150);
-		float per_height = (float) px_height / (maxY - minY);
-		float iv_adnormal_height = per_height * (maxAdnormal - minAdnormal);
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, (int) iv_adnormal_height);
-		rlParams.setMargins(toPix(34),
-				(int) (toPix(50) + ((maxY - maxAdnormal) * per_height)),
-				toPix(20), 0);
-		ivAdnormal.setLayoutParams(rlParams);
+		g.update();
 	}
 
 	/**
 	 * x축의 label 설정.
 	 * 
 	 * @author leejeongho
-	 * @since 2014.09.04
+	 * @since 2014.09.05
 	 * @param flag
 	 *            x축에 대한 단위. Day: 24, Week: 7, Month: 28, Year: 12
 	 */
@@ -314,7 +223,7 @@ public class BloodMainActivity extends ActionBarActivity {
 	 * **
 	 * 
 	 * @author leejeongho
-	 * @since 2014.09.03
+	 * @since 2014.09.05
 	 * @param coordinates
 	 *            {@link Coordinates}
 	 */
@@ -323,8 +232,8 @@ public class BloodMainActivity extends ActionBarActivity {
 
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		rlParams.setMargins((int) coordinates.getX() + 10,
-				(int) coordinates.getY() + 10, 0, 0);
+		rlParams.setMargins((int) coordinates.getX(), (int) coordinates.getY(),
+				0, 0);
 		TextView tvTooltip = new TextView(getApplicationContext());
 		tvTooltip.setLayoutParams(rlParams);
 		tvTooltip.setText("" + ((int) coordinates.getValue()));
@@ -339,7 +248,7 @@ public class BloodMainActivity extends ActionBarActivity {
 	 * DIP 수치를 Pixel 수치로 변환. 동적으로 View를 그려넣을때 필요.
 	 * 
 	 * @author leejeongho
-	 * @since 2014.09.03
+	 * @since 2014.09.05
 	 * @param value
 	 *            변환할 DIP 수치.
 	 * @return 변환된 Pixel 수치.

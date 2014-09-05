@@ -7,5 +7,7 @@
     <string name="title_activity_blood_main">BloodMainActivity</string>
     <string name="title_activity_workout_main">WorkoutMainActivity</string>
     <string name="title_activity_pressure_main">PressureMainActivity</string>
+    <string name="title_activity_food_main">FoodMainActivity</string>
+    <string name="title_activity_medicine_main">MedicineMainActivity</string>
 
 </resources>

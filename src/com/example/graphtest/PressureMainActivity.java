@@ -11,6 +11,7 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.util.*;
 import android.view.*;
+import android.view.View.*;
 import android.widget.*;
 import android.widget.RelativeLayout.*;
 
@@ -45,10 +46,42 @@ public class PressureMainActivity extends ActionBarActivity {
 		ivNormalRelax = (ImageView) findViewById(R.id.iv_normal_relax);
 		rlTooltip = (RelativeLayout) findViewById(R.id.rl_tooltip);
 		initGraph(dateFlagWeek);
+
+		Button btnDay = (Button) findViewById(R.id.btn_day);
+		Button btnWeek = (Button) findViewById(R.id.btn_week);
+		Button btnMonth = (Button) findViewById(R.id.btn_month);
+		Button btnYear = (Button) findViewById(R.id.btn_year);
+		btnDay.setOnClickListener(mClick);
+		btnWeek.setOnClickListener(mClick);
+		btnMonth.setOnClickListener(mClick);
+		btnYear.setOnClickListener(mClick);
 	}
+
+	OnClickListener mClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			rlTooltip.removeAllViews();
+			switch (v.getId()) {
+			case R.id.btn_day:
+				initGraph(dateFlagDay);
+				break;
+			case R.id.btn_week:
+				initGraph(dateFlagWeek);
+				break;
+			case R.id.btn_month:
+				initGraph(dateFlagMonth);
+				break;
+			case R.id.btn_year:
+				initGraph(dateFlagYear);
+				break;
+			}
+		}
+	};
 
 	/**
 	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정.
+	 * **주, 월 , 년 일때는 x축의 시작과 끝값을 사용안함.
 	 * 
 	 * @author leejeongho
 	 * @since 2014.09.02
@@ -66,25 +99,48 @@ public class PressureMainActivity extends ActionBarActivity {
 		tvMinY.setText("" + ((int) minY));
 
 		li = (LineGraph) findViewById(R.id.linegraph);
+		li.removeAllLines();
 		li.setRangeY(minY, maxY);
-		li.setMaxX(dateFlag + 1);
+
+		int maxX = dateFlag;
+		int maxI = maxX;
+		int increaseValue = 1;
+
+		switch (dateFlag) {
+		case dateFlagDay:
+			increaseValue = 60;
+			li.setMaxX(maxX);
+			break;
+		case dateFlagWeek:
+			maxI = maxX + 1;
+			li.setMaxX(maxX + 1);
+			break;
+		default:
+			li.setMaxX(maxX+1);
+			break;
+		}
 
 		ArrayList<Line> arrLine = new ArrayList<Line>();
-		for (int i = 0; i < dateFlag; i++) {
-			arrLine.add(new Line());
-			LinePoint p = new LinePoint();
-			p.setX(i + 1);
-			p.setY(150);
-			arrLine.get(i).addPoint(p);
-			p = new LinePoint();
-			p.setX(i + 1);
-			p.setY(110);
-			arrLine.get(i).addPoint(p);
-			arrLine.get(i).setColor(Color.parseColor(colorContract));
-			arrLine.get(i).setIsPressure(true);
-			arrLine.get(i).setColorPressure(Color.parseColor(colorRelax));
+		int index = 0;
+		for (int i = 1; i <= maxI; i += increaseValue) {
+			if (!(dateFlag == dateFlagWeek && maxI == i)) {
+				arrLine.add(new Line());
+				LinePoint p = new LinePoint();
+				p.setX(i);
+				p.setY(150);
+				arrLine.get(index).addPoint(p);
+				p = new LinePoint();
+				p.setX(i);
+				p.setY(110);
+				arrLine.get(index).addPoint(p);
+				arrLine.get(index).setColor(Color.parseColor(colorContract));
+				arrLine.get(index).setIsPressure(true);
+				arrLine.get(index).setColorPressure(
+						Color.parseColor(colorRelax));
 
-			li.addLine(arrLine.get(i));
+				li.addLine(arrLine.get(index));
+				index++;
+			}
 		}
 
 		li.setOnPointClickedListener(new OnPointClickedListener() {
@@ -175,27 +231,77 @@ public class PressureMainActivity extends ActionBarActivity {
 	private void setXLabel(int flag) {
 		Calendar mDate = Calendar.getInstance();
 		TextView tvDate = (TextView) findViewById(R.id.tv_date);
+		RelativeLayout rlXLabelDay = (RelativeLayout) findViewById(R.id.rl_graph_x_label_day);
+		LinearLayout llXLabelWeek = (LinearLayout) findViewById(R.id.ll_graph_x_label_week);
+		LinearLayout llXLabelMonth = (LinearLayout) findViewById(R.id.ll_graph_x_label_month);
+		LinearLayout llXLabelYear = (LinearLayout) findViewById(R.id.ll_graph_x_label_year);
 		switch (flag) {
 		case dateFlagDay:
 			tvDate.setText(DateFormat.format("MM월 dd일", mDate.getTime()));
-			RelativeLayout rlXLabelDay = (RelativeLayout) findViewById(R.id.rl_graph_x_label_day);
 			rlXLabelDay.setVisibility(View.VISIBLE);
+			llXLabelWeek.setVisibility(View.INVISIBLE);
+			llXLabelMonth.setVisibility(View.INVISIBLE);
+			llXLabelYear.setVisibility(View.INVISIBLE);
 			break;
 		case dateFlagWeek:
-			String dateEnd = (String) DateFormat.format("MM월 dd일",
+			String dateEndWeek = (String) DateFormat.format("MM월 dd일",
 					mDate.getTime());
 			mDate.add(Calendar.DAY_OF_MONTH, -6);
-			String dateStart = (String) DateFormat.format("MM월 dd일 - ",
+			String dateStartWeek = (String) DateFormat.format("MM월 dd일 - ",
 					mDate.getTime());
-			tvDate.setText(dateStart + dateEnd);
+			tvDate.setText(dateStartWeek + dateEndWeek);
 
-			LinearLayout llXLabelWeek = (LinearLayout) findViewById(R.id.ll_graph_x_label_week);
+			rlXLabelDay.setVisibility(View.INVISIBLE);
 			llXLabelWeek.setVisibility(View.VISIBLE);
-			ArrayList<TextView> arrLabels = new ArrayList<TextView>();
+			llXLabelMonth.setVisibility(View.INVISIBLE);
+			llXLabelYear.setVisibility(View.INVISIBLE);
+
+			ArrayList<TextView> arrLabelWeek = new ArrayList<TextView>();
 			for (int i = 0; i < 7; i++) {
-				arrLabels.add((TextView) llXLabelWeek.getChildAt(i));
-				arrLabels.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+				arrLabelWeek.add((TextView) llXLabelWeek.getChildAt(i));
+				arrLabelWeek.get(i).setText(
+						mDate.get(Calendar.DAY_OF_MONTH) + "");
 				mDate.add(Calendar.DAY_OF_MONTH, 1);
+			}
+			break;
+		case dateFlagMonth:
+			String dateEndMonth = (String) DateFormat.format("MM월 dd일",
+					mDate.getTime());
+			mDate.add(Calendar.DAY_OF_MONTH, -27);
+			String dateStartMonth = (String) DateFormat.format("MM월 dd일 - ",
+					mDate.getTime());
+			tvDate.setText(dateStartMonth + dateEndMonth);
+
+			rlXLabelDay.setVisibility(View.INVISIBLE);
+			llXLabelWeek.setVisibility(View.INVISIBLE);
+			llXLabelMonth.setVisibility(View.VISIBLE);
+			llXLabelYear.setVisibility(View.INVISIBLE);
+			ArrayList<TextView> arrLabelMonth = new ArrayList<TextView>();
+			for (int i = 0; i < 9; i++) {
+				arrLabelMonth.add((TextView) llXLabelMonth.getChildAt(i));
+				if (i==0){
+					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+					mDate.add(Calendar.DAY_OF_MONTH, 6);
+				}
+				else if (i % 2 == 0) {
+					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+					mDate.add(Calendar.DAY_OF_MONTH, 7);
+				}
+			}
+			break;
+		case dateFlagYear:
+			tvDate.setText(mDate.get(Calendar.YEAR) + "년");
+			rlXLabelDay.setVisibility(View.INVISIBLE);
+			llXLabelWeek.setVisibility(View.INVISIBLE);
+			llXLabelMonth.setVisibility(View.INVISIBLE);
+			llXLabelYear.setVisibility(View.VISIBLE);
+			mDate.add(Calendar.MONTH, -11);
+			ArrayList<TextView> arrLabelYear = new ArrayList<TextView>();
+			for (int i = 0; i < 12; i++) {
+				arrLabelYear.add((TextView) llXLabelYear.getChildAt(i));
+				arrLabelYear.get(i).setText(
+						(mDate.get(Calendar.MONTH) + 1) + "");
+				mDate.add(Calendar.MONTH, 1);
 			}
 			break;
 		}
