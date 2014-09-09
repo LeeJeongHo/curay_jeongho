@@ -2,6 +2,10 @@
 *.apk
 *.ap_
 
+# setting files
+*.prefs
+R.java
+
 # files for the dex VM
 *.dex
 

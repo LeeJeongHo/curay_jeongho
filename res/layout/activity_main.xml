@@ -13,46 +13,113 @@
         android:layout_height="match_parent" >
 
         <LinearLayout
+            android:id="@+id/ll_content_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/btn_blood_main"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:text="blood_main" />
+            <RelativeLayout
+                android:id="@+id/rl_graph_root"
+                android:layout_width="332dp"
+                android:layout_height="236dp"
+                android:layout_marginTop="8dp"
+                android:background="#ffffff" />
 
-            <Button
-                android:id="@+id/btn_workout_main"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:text="workout_main" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
 
-            <Button
-                android:id="@+id/btn_pressure_main"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:text="pressure_main" />
+                <Button
+                    android:id="@+id/btn_glucose_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="혈당"
+                    android:textSize="10sp" />
 
-            <Button
-                android:id="@+id/btn_food_main"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:text="food_main" />
+                <Button
+                    android:id="@+id/btn_pressure_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="혈압"
+                    android:textSize="10sp" />
 
-            <Button
-                android:id="@+id/btn_medicine_main"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:text="medicine_main" />
+                <Button
+                    android:id="@+id/btn_weight_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="체중"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_workout_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="운동"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_food_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="음식"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_medicine_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="복약"
+                    android:textSize="10sp" />
+            </LinearLayout>
             
-            <Button
-                android:id="@+id/btn_weight_main"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:text="weight_main" />
+                        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btn_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="일"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="주"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="월"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btn_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="년"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
