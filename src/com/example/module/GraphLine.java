@@ -131,12 +131,13 @@ public class GraphLine extends View {
 
 		int maxX = dateFlag;
 		int increaseValue = 1;
+		int increaseX = 1;
 
 		if (dateFlag == dateFlagDay) {
 			increaseValue = 60;
 			mGraph.setMaxX(maxX);
 		} else {
-			mGraph.setMaxX(maxX + 1);
+			mGraph.setMaxX(maxX*2);
 		}
 
 		int minY = 0, maxY = 0;
@@ -172,6 +173,7 @@ public class GraphLine extends View {
 
 			Line lineAfter = new Line();
 			Line lineBefore = new Line();
+			increaseX = 1;
 			for (int i = 0; i < arrDataFirst.size(); i += increaseValue) {
 				int value = arrDataFirst.get(i).getValue();
 				if (value != 0) {
@@ -180,15 +182,17 @@ public class GraphLine extends View {
 //						p.setX(arrDataFirst.get(i).getTimeToInt());
 //					}
 //					else{
-						p.setX(i+1);
+						p.setX(increaseX);
 //					}
 					p.setY(value);
 					lineAfter.addPoint(p);
 					lineAfter.setColor(Color.parseColor(colorAfter));
 				}
+				increaseX+=2;
 			}
 			mGraph.addLine(lineAfter);
 
+			increaseX = 1;
 			for (int i = 0; i < arrDataSecond.size(); i += increaseValue) {
 				int value = arrDataSecond.get(i).getValue();
 				if (value != 0) {
@@ -197,12 +201,13 @@ public class GraphLine extends View {
 //						p.setX(arrDataSecond.get(i).getTimeToInt());
 //					}
 //					else{
-						p.setX(i+1);
+						p.setX(increaseX);
 //					}
 					p.setY(value);
 					lineBefore.addPoint(p);
 					lineBefore.setColor(Color.parseColor(colorBefore));
 				}
+				increaseX+=2;
 			}
 			mGraph.addLine(lineBefore);
 
@@ -222,6 +227,7 @@ public class GraphLine extends View {
 
 			ArrayList<Line> arrLine = new ArrayList<Line>();
 			int index = 0;
+			increaseX = 1;
 			for (int i = 0; i < arrDataFirst.size(); i += increaseValue) {
 				arrLine.add(new Line());
 				LinePoint p = new LinePoint();
@@ -229,7 +235,7 @@ public class GraphLine extends View {
 //					p.setX(arrDataFirst.get(i).getTimeToInt());
 //				}
 //				else{
-					p.setX(i+1);
+					p.setX(increaseX);
 //				}
 				p.setY(arrDataFirst.get(i).getValue());
 				arrLine.get(index).addPoint(p);
@@ -238,7 +244,7 @@ public class GraphLine extends View {
 //					p.setX(arrDataSecond.get(i).getTimeToInt());
 //				}
 //				else{
-					p.setX(i+1);
+					p.setX(increaseX);
 //				}
 				p.setY(arrDataSecond.get(i).getValue());
 				arrLine.get(index).addPoint(p);
@@ -248,6 +254,7 @@ public class GraphLine extends View {
 
 				mGraph.addLine(arrLine.get(index));
 				index++;
+				increaseX+=2;
 			}
 
 			setRangeFirst(minY, maxY, 120, 150, colorRangeContract);
@@ -264,6 +271,7 @@ public class GraphLine extends View {
 			int goalValue = 70;
 			
 			Line lineWeight = new Line();
+			increaseX = 1;
 			for (int i = 0; i < arrDataFirst.size(); i += increaseValue) {
 				int value = arrDataFirst.get(i).getValue();
 				if (value != 0) {
@@ -272,12 +280,13 @@ public class GraphLine extends View {
 //						p.setX(arrDataFirst.get(i).getTimeToInt());
 //					}
 //					else{
-						p.setX(i+1);
+						p.setX(increaseX);
 //					}
 					p.setY(value);
 					lineWeight.addPoint(p);
 					lineWeight.setColor(Color.parseColor(colorWeight));
 				}
+				increaseX+=2;
 			}
 			mGraph.addLine(lineWeight);
 
@@ -391,7 +400,7 @@ public class GraphLine extends View {
 		int px_height = toPix(150);
 		float per_height = (float) px_height / (maxY - minY);
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, toPix(15));
-		rlParams.setMargins(toPix(35), (int) (toPix(50 - 15) + ((maxY - value) * per_height)), toPix(20), 0);
+		rlParams.setMargins(toPix(39), (int) (toPix(50 - 15) + ((maxY - value) * per_height)), toPix(15), 0);
 		rlGoal.setLayoutParams(rlParams);
 		TextView tvGoal = (TextView) graphRoot.findViewById(R.id.tv_goal);
 		tvGoal.setText(value + unit);
@@ -417,7 +426,7 @@ public class GraphLine extends View {
 		float per_height = (float) px_height / (maxY - minY);
 		float iv_normal_height = per_height * (maxNormal - minNormal);
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) iv_normal_height);
-		rlParams.setMargins(toPix(34), (int) (toPix(50) + ((maxY - maxNormal) * per_height)), toPix(20), 0);
+		rlParams.setMargins(toPix(39), (int) (toPix(50) + ((maxY - maxNormal) * per_height)), toPix(15), 0);
 		ivRangeFirst.setLayoutParams(rlParams);
 		ivRangeFirst.setBackgroundColor(Color.parseColor(color));
 		ivRangeFirst.setVisibility(View.VISIBLE);
@@ -449,7 +458,7 @@ public class GraphLine extends View {
 		float per_height = (float) px_height / (maxY - minY);
 		float iv_adnormal_height = per_height * (maxAdnormal - minAdnormal);
 		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int) iv_adnormal_height);
-		rlParams.setMargins(toPix(34), (int) (toPix(50) + ((maxY - maxAdnormal) * per_height)),	toPix(20), 0);
+		rlParams.setMargins(toPix(39), (int) (toPix(50) + ((maxY - maxAdnormal) * per_height)),	toPix(15), 0);
 		ivRangeSecond.setLayoutParams(rlParams);
 		ivRangeSecond.setBackgroundColor(Color.parseColor(color));
 		ivRangeSecond.setVisibility(View.VISIBLE);

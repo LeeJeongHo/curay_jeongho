@@ -41,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
 		Button btnWorkout = (Button) findViewById(R.id.btn_workout_main);
 		Button btnFood = (Button) findViewById(R.id.btn_food_main);
 		Button btnMedicine = (Button) findViewById(R.id.btn_medicine_main);
+		Button btnCompare = (Button) findViewById(R.id.btn_compare);
 
 		btnGlucose.setOnClickListener(mGraph);
 		btnPressure.setOnClickListener(mGraph);
@@ -48,6 +49,7 @@ public class MainActivity extends ActionBarActivity {
 		btnWorkout.setOnClickListener(mGraph);
 		btnFood.setOnClickListener(mGraph);
 		btnMedicine.setOnClickListener(mGraph);
+		btnCompare.setOnClickListener(mGraph);
 
 		Button btnDay = (Button) findViewById(R.id.btn_day);
 		Button btnWeek = (Button) findViewById(R.id.btn_week);
@@ -184,6 +186,10 @@ public class MainActivity extends ActionBarActivity {
 				arrDataFirst = setMedicineData(GraphBar.dateFlagDay);
 				medicineGraph 
 				= new GraphBar(getApplicationContext(),	rlGraphRoot, graphFlag, GraphBar.dateFlagDay, arrDataFirst);
+				break;
+			case R.id.btn_compare:
+				startActivity(new Intent(getApplicationContext(), com.example.graphtest.CompareActivity.class)
+				.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP));
 				break;
 			default:
 				break;

@@ -10,5 +10,6 @@
     <string name="title_activity_food_main">FoodMainActivity</string>
     <string name="title_activity_medicine_main">MedicineMainActivity</string>
     <string name="title_activity_weight_main">WeightMainActivity</string>
+    <string name="title_activity_compare">CompareActivity</string>
 
 </resources>
