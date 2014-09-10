@@ -10,10 +10,17 @@ import android.view.*;
 import android.widget.*;
 import android.widget.RelativeLayout.*;
 import com.example.graphtest.R;
+import com.example.structure.*;
 
 import com.echo.holographlibrary.*;
 import com.echo.holographlibrary.LineGraph.*;
 
+/**
+ * 꺽은선 그래프를 그리기 위한 모듈.
+ * 
+ * @author leejeongho
+ * @since 2014.09.09
+ */
 public class GraphLine extends View {
 
 	/** Context */
@@ -33,6 +40,10 @@ public class GraphLine extends View {
 	TextView tvDate;
 	/** graph y축 단위 */
 	String unit = "kcal";
+	
+	/** graph 데이터 */
+	ArrayList<PointData> arrDataFirst = new ArrayList<PointData> ();
+	ArrayList<PointData> arrDataSecond = new ArrayList<PointData> ();
 
 	/** graph 의 종류 구분 */
 	final public static int graphFlagGlucose = 10000;
@@ -58,12 +69,26 @@ public class GraphLine extends View {
 	final static String colorRangeRelax = "#e0ecf4";
 
 	public GraphLine(Context context) {
-		this(context, null, -1, -1);
+		this(context, null, -1, -1, new ArrayList<PointData>(), new ArrayList<PointData>());
 	}
 
-	public GraphLine(Context context, RelativeLayout rlRoot, int graphFlag,	int dateFlag) {
+	/**
+	 * 클래스 생성자.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.10
+	 * @param context context
+	 * @param rlRoot graph 를 넣을 부모 뷰.
+	 * @param graphFlag graph 종류. {@link GraphLine} 참고. 
+	 * @param dateFlag x축 날짜 범위 종류. {@link GraphLine} 참고.
+	 * @param arrDataFirst graph에 넣을 데이터. (식후 혈당, 수축기 혈압, 체중)
+	 * @param arrDataSecond graph에 넣을 데이터. (식전 혈당. 이완기 혈압, 체중은 null)
+	 */
+	public GraphLine(Context context, RelativeLayout rlRoot, int graphFlag,	int dateFlag, ArrayList<PointData> arrDataFirst, ArrayList<PointData> arrDataSecond) {
 		super(context);
-		mContext = context;
+		this.mContext = context;
+		this.arrDataFirst = arrDataFirst;
+		this.arrDataSecond = arrDataSecond;
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -82,6 +107,11 @@ public class GraphLine extends View {
 		} else {
 			// To-Do 예외처리.
 		}
+	}
+	
+	public void setData(ArrayList<PointData> arrDataFirst, ArrayList<PointData> arrDataSecond){
+		this.arrDataFirst = arrDataFirst;
+		this.arrDataSecond = arrDataSecond;
 	}
 
 	/**
@@ -114,16 +144,44 @@ public class GraphLine extends View {
 		switch (graphFlag) {
 		case graphFlagGlucose:
 			setUnit("mg/dL");
-			maxY = 300;
-			minY = 60;
+			int maxYAfter = getMaxValue(arrDataFirst);
+			int maxYBefore = getMaxValue(arrDataSecond);
+			int minYAfter = getMinValue(arrDataFirst);
+			int minYBefore = getMinValue(arrDataSecond);
+			
+			if(maxYAfter > maxYBefore){
+				maxY = maxYAfter+30;
+			}
+			else{
+				maxY = maxYBefore+30;
+			}
+			
+			if(minYAfter < minYBefore){
+				minY = minYAfter-30;
+			}
+			else{
+				minY = minYBefore-30;
+			}
+			
+			if(minY < 0){
+				minY = 0;
+			}
+			
+//			maxY = 300;
+//			minY = 60;
 
 			Line lineAfter = new Line();
 			Line lineBefore = new Line();
-			for (int i = 1; i <= maxX; i += increaseValue) {
-				if (((int) (Math.random() * maxX) % 2) == 0) {
-					float value = (float) (minY + Math.random() * (maxY - minY));
+			for (int i = 0; i < arrDataFirst.size(); i += increaseValue) {
+				int value = arrDataFirst.get(i).getValue();
+				if (value != 0) {
 					LinePoint p = new LinePoint();
-					p.setX(i);
+//					if(dateFlag == dateFlagDay){
+//						p.setX(arrDataFirst.get(i).getTimeToInt());
+//					}
+//					else{
+						p.setX(i+1);
+//					}
 					p.setY(value);
 					lineAfter.addPoint(p);
 					lineAfter.setColor(Color.parseColor(colorAfter));
@@ -131,11 +189,16 @@ public class GraphLine extends View {
 			}
 			mGraph.addLine(lineAfter);
 
-			for (int i = 1; i <= maxX; i += increaseValue) {
-				if (((int) (Math.random() * maxX) % 2) == 0) {
-					float value = (float) (minY + Math.random() * (maxY - minY));
+			for (int i = 0; i < arrDataSecond.size(); i += increaseValue) {
+				int value = arrDataSecond.get(i).getValue();
+				if (value != 0) {
 					LinePoint p = new LinePoint();
-					p.setX(i);
+//					if(dateFlag == dateFlagDay){
+//						p.setX(arrDataSecond.get(i).getTimeToInt());
+//					}
+//					else{
+						p.setX(i+1);
+//					}
 					p.setY(value);
 					lineBefore.addPoint(p);
 					lineBefore.setColor(Color.parseColor(colorBefore));
@@ -149,20 +212,35 @@ public class GraphLine extends View {
 			break;
 		case graphFlagPressure:
 			setUnit("mmHg");
-			maxY = 180;
-			minY = 80;
+			maxY = getMaxValue(arrDataFirst)+10;
+			minY = getMinValue(arrDataSecond)-10;
+			if(minY < 0){
+				minY = 0;
+			}
+//			maxY = 180;
+//			minY = 80;
 
 			ArrayList<Line> arrLine = new ArrayList<Line>();
 			int index = 0;
-			for (int i = 1; i <= maxX; i += increaseValue) {
+			for (int i = 0; i < arrDataFirst.size(); i += increaseValue) {
 				arrLine.add(new Line());
 				LinePoint p = new LinePoint();
-				p.setX(i);
-				p.setY(150);
+//				if(dateFlag == dateFlagDay){
+//					p.setX(arrDataFirst.get(i).getTimeToInt());
+//				}
+//				else{
+					p.setX(i+1);
+//				}
+				p.setY(arrDataFirst.get(i).getValue());
 				arrLine.get(index).addPoint(p);
 				p = new LinePoint();
-				p.setX(i);
-				p.setY(110);
+//				if(dateFlag == dateFlagDay){
+//					p.setX(arrDataSecond.get(i).getTimeToInt());
+//				}
+//				else{
+					p.setX(i+1);
+//				}
+				p.setY(arrDataSecond.get(i).getValue());
 				arrLine.get(index).addPoint(p);
 				arrLine.get(index).setColor(Color.parseColor(colorContract));
 				arrLine.get(index).setIsPressure(true);
@@ -178,16 +256,24 @@ public class GraphLine extends View {
 			break;
 		case graphFlagWeight:
 			setUnit("kcal");
-			maxY = 80;
-			minY = 50;
+			maxY = getMaxValue(arrDataFirst)+10;
+			minY = getMinValue(arrDataFirst)-10;
+			if(minY < 0){
+				minY = 0;
+			}
 			int goalValue = 70;
 			
 			Line lineWeight = new Line();
-			for (int i = 1; i <= maxX; i += increaseValue) {
-				if (((int) (Math.random() * maxX) % 2) == 0) {
-					float value = (float) (goalValue - 10 + Math.random() * 20);
+			for (int i = 0; i < arrDataFirst.size(); i += increaseValue) {
+				int value = arrDataFirst.get(i).getValue();
+				if (value != 0) {
 					LinePoint p = new LinePoint();
-					p.setX(i);
+//					if(dateFlag == dateFlagDay){
+//						p.setX(arrDataFirst.get(i).getTimeToInt());
+//					}
+//					else{
+						p.setX(i+1);
+//					}
 					p.setY(value);
 					lineWeight.addPoint(p);
 					lineWeight.setColor(Color.parseColor(colorWeight));
@@ -484,5 +570,46 @@ public class GraphLine extends View {
 	private int toPix(int value) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,	value, mContext.getResources().getDisplayMetrics());
 	}
+	
 
+	/**
+	 * array 의 최대값 구하기.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.10
+	 * @param arrData {@link PointData} 의 ArrayList
+	 * @return array 의 최대값.
+	 */
+	private int getMaxValue(ArrayList<PointData> arrData){
+		int maxValue = arrData.get(0).getValue();
+		for(int i=1;i<arrData.size();i++){
+			int currentValue = arrData.get(i).getValue(); 
+			if(maxValue<currentValue){
+				maxValue = currentValue;
+			}
+		}
+		return maxValue;
+	}
+	
+	/**
+	 * array 의 최소값 구하기.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.10
+	 * @param arrData {@link PointData} 의 ArrayList
+	 * @return array 의 최소값.
+	 */
+	private int getMinValue(ArrayList<PointData> arrData){
+		int minValue = 9999999;
+		for(int i=1;i<arrData.size();i++){
+			int currentValue = arrData.get(i).getValue(); 
+			if(minValue>currentValue && currentValue!=0){
+				minValue = currentValue;
+			}
+		}
+		if (minValue == 9999999){
+			minValue = 0;
+		}
+		return minValue;
+	}
 }

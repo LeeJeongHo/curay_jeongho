@@ -11,10 +11,17 @@ import android.widget.*;
 import android.widget.RelativeLayout.*;
 
 import com.example.graphtest.R;
+import com.example.structure.*;
 
 import com.echo.holographlibrary.*;
 import com.echo.holographlibrary.BarGraph.*;
 
+/**
+ * 막대 그래프를 그리기 위한 모듈.
+ * 
+ * @author leejeongho
+ * @since 2014.09.09
+ */
 public class GraphBar {
 
 	/** Context */
@@ -30,6 +37,9 @@ public class GraphBar {
 	TextView tvDate;
 	/** graph y축 단위 */
 	String unit = "kcal";
+
+	/** graph 데이터 */
+	ArrayList<PointData> arrData = new ArrayList<PointData>();
 
 	/** graph 의 종류 구분 */
 	final public static int graphFlagWorkout = 10003;
@@ -53,19 +63,39 @@ public class GraphBar {
 	final static String colorMedicineOutside = "#61bf52";
 
 	public GraphBar(Context context) {
-		this(context, null, -1, -1);
+		this(context, null, -1, -1, new ArrayList<PointData>());
 	}
 
-	public GraphBar(Context context, RelativeLayout rlRoot, int graphFlag, int dateFlag) {
+	/**
+	 * 클래스 생성자.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.11
+	 * @param context
+	 *            context
+	 * @param rlRoot
+	 *            graph 를 넣을 부모 뷰.
+	 * @param graphFlag
+	 *            graph 종류. {@link GraphBar} 참고.
+	 * @param dateFlag
+	 *            x축 날짜 범위 종류. {@link GraphBar} 참고.
+	 * @param arrData
+	 *            graph 에 넣을 데이터.
+	 */
+	public GraphBar(Context context, RelativeLayout rlRoot, int graphFlag,
+			int dateFlag, ArrayList<PointData> arrData) {
 		super();
-		mContext = context;
-		
+		this.mContext = context;
+		this.arrData = arrData;
+
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		graphRoot = (RelativeLayout) inflater.inflate(R.layout.graph_bar, rlRoot, false);
+		graphRoot = (RelativeLayout) inflater.inflate(R.layout.graph_bar,
+				rlRoot, false);
 
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(toPix(332), toPix(236));
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
+				toPix(332), toPix(236));
 		rlRoot.addView(graphRoot, rlParams);
 
 		rlTooltip = (RelativeLayout) graphRoot.findViewById(R.id.rl_tooltip);
@@ -78,9 +108,13 @@ public class GraphBar {
 		}
 	}
 
+	public void setData(ArrayList<PointData> arrData) {
+		this.arrData = arrData;
+	}
+
 	/**
-	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정. 
-	 * **주, 월 , 년 일때는 x축의 시작과 끝값을 사용안함.
+	 * Graph를 그리기 위해 값과 Graph에 대한 값을 설정하고 각 포인트에 대한 ClickEvent역시 설정. **주, 월 , 년
+	 * 일때는 x축의 시작과 끝값을 사용안함.
 	 * 
 	 * @author leejeongho
 	 * @since 2014.09.09
@@ -98,84 +132,148 @@ public class GraphBar {
 		switch (graphFlag) {
 		case graphFlagWorkout:
 			setUnit("kcal");
-			
-			maxValue = 2000;
+
+			maxValue = getMaxValue(arrData) + 100;
 			minValue = 0;
 			goalValue = 1200;
-			
-			Bar workoutPoint = new Bar();
-			workoutPoint.setColor(Color.parseColor(colorWorkoutOver));
-			workoutPoint.setName("1");
-			workoutPoint.setValue(maxValue);
-			points.add(workoutPoint);
 
-			for (int i = 2; i <= dateFlag; i++) {
-				Bar point = new Bar();
-				float value = (float) (Math.random() * maxValue);
-				if (value >= goalValue) {
-					point.setColor(Color.parseColor(colorWorkoutOver));
-				} else {
-					point.setColor(Color.parseColor(colorWorkoutDefault));
+			if (dateFlag == dateFlagDay) {
+				int index = 0;
+				for (int i = 0; i < dateFlagDay; i++) {
+					Bar point = new Bar();
+					int value = 0;
+					if (i == arrData.get(index).getHour()) {
+						value = arrData.get(index).getValue();
+						index++;
+					}
+					if (value >= goalValue) {
+						point.setColor(Color.parseColor(colorWorkoutOver));
+					} else {
+						point.setColor(Color.parseColor(colorWorkoutDefault));
+					}
+					point.setName("" + i);
+					point.setValue(value);
+					points.add(point);
 				}
-				point.setName("" + i);
-				point.setValue(value);
-				points.add(point);
+
+			} else {
+				for (int i = 0; i < arrData.size(); i++) {
+					Bar point = new Bar();
+					int value = arrData.get(i).getValue();
+					if (value >= goalValue) {
+						point.setColor(Color.parseColor(colorWorkoutOver));
+					} else {
+						point.setColor(Color.parseColor(colorWorkoutDefault));
+					}
+					point.setName("" + i);
+					point.setValue(value);
+					points.add(point);
+				}
 			}
 			setGoal(minValue, maxValue, goalValue);
 			break;
 		case graphFlagFood:
 			setUnit("kcal");
-			
-			maxValue = 2300;
+
+			maxValue = getMaxValue(arrData) + 100;
 			minValue = 0;
 			goalValue = 1300;
-			
-			Bar foodPoint = new Bar();
-			foodPoint.setColor(Color.parseColor(colorWorkoutOver));
-			foodPoint.setName("1");
-			foodPoint.setValue(maxValue);
-			points.add(foodPoint);
-			for (int i = 2; i <= dateFlag; i++) {
-				Bar point = new Bar();
-				float value = (float) (Math.random() * maxValue);
-				if (value >= goalValue) {
-					point.setColor(Color.parseColor(colorFoodOver));
-				} else {
-					point.setColor(Color.parseColor(colorFoodDefault));
+			if (dateFlag == dateFlagDay) {
+				int index = 0;
+				for (int i = 0; i < dateFlagDay; i++) {
+					Bar point = new Bar();
+					int value = 0;
+					if (i == arrData.get(index).getHour()) {
+						value = arrData.get(index).getValue();
+						index++;
+					}
+					if (value >= goalValue) {
+						point.setColor(Color.parseColor(colorFoodOver));
+					} else {
+						point.setColor(Color.parseColor(colorFoodDefault));
+					}
+					point.setName("" + i);
+					point.setValue(value);
+					points.add(point);
 				}
-				point.setName("" + i);
-				point.setValue(value);
-				points.add(point);
+
+			} else {
+
+				for (int i = 0; i < arrData.size(); i++) {
+					Bar point = new Bar();
+					int value = arrData.get(i).getValue();
+					if (value >= goalValue) {
+						point.setColor(Color.parseColor(colorFoodOver));
+					} else {
+						point.setColor(Color.parseColor(colorFoodDefault));
+					}
+					point.setName("" + i);
+					point.setValue(value);
+					points.add(point);
+				}
 			}
 			setGoal(minValue, maxValue, goalValue);
 			break;
 		case graphFlagMedicine:
 			setUnit("횟수");
-			
+
 			maxValue = 2;
 			minValue = 0;
-			
-			for (int i = 1; i <= dateFlag; i++) {
-				Bar point = new Bar();
-				int value = (int) (Math.random() * maxValue);
-				int colorFlag = (int) (Math.random() * 4);
-				switch (colorFlag) {
-				case 0:
-					point.setColor(Color.parseColor(colorMedicineAfter));
-					break;
-				case 1:
-					point.setColor(Color.parseColor(colorMedicineBefore));
-					break;
-				case 2:
-					point.setColor(Color.parseColor(colorMedicineInsulin));
-					break;
-				case 3:
-					point.setColor(Color.parseColor(colorMedicineOutside));
-					break;
+
+			if (dateFlag == dateFlagDay) {
+				int index = 0;
+				for (int i = 0; i < dateFlagDay; i++) {
+					Bar point = new Bar();
+					int value = 0;
+					if (i == arrData.get(index).getHour()) {
+						value = arrData.get(index).getValue();
+						index++;
+					}
+					int medicineFlag = arrData.get(i).getMedicineFlag();
+					switch (medicineFlag) {
+					case 0:
+						point.setColor(Color.parseColor(colorMedicineAfter));
+						break;
+					case 1:
+						point.setColor(Color.parseColor(colorMedicineBefore));
+						break;
+					case 2:
+						point.setColor(Color.parseColor(colorMedicineInsulin));
+						break;
+					case 3:
+						point.setColor(Color.parseColor(colorMedicineOutside));
+						break;
+					}
+
+					point.setName("" + i);
+					point.setValue(value);
+					points.add(point);
 				}
-				point.setName("" + i);
-				point.setValue(value);
-				points.add(point);
+
+			} else {
+
+				for (int i = 0; i < arrData.size(); i++) {
+					Bar point = new Bar();
+					int value = arrData.get(i).getValue();
+					int medicineFlag = arrData.get(i).getMedicineFlag();
+					switch (medicineFlag) {
+					case 0:
+						point.setColor(Color.parseColor(colorMedicineAfter));
+						break;
+					case 1:
+						point.setColor(Color.parseColor(colorMedicineBefore));
+						break;
+					case 2:
+						point.setColor(Color.parseColor(colorMedicineInsulin));
+						break;
+					case 3:
+						point.setColor(Color.parseColor(colorMedicineOutside));
+						break;
+					}
+					point.setName("" + i);
+					point.setValue(value);
+					points.add(point);
+				}
 			}
 			break;
 		}
@@ -244,7 +342,8 @@ public class GraphBar {
 	 * @return 변환된 Pixel 수치.
 	 */
 	private int toPix(int value) {
-		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,	value, mContext.getResources().getDisplayMetrics());
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+				value, mContext.getResources().getDisplayMetrics());
 	}
 
 	/**
@@ -261,13 +360,17 @@ public class GraphBar {
 	 */
 	private void setGoal(int minY, int maxY, int value) {
 		/** 목표 표시를 위한 별도의 View */
-		RelativeLayout rlGoal = (RelativeLayout) graphRoot.findViewById(R.id.rl_goal);
+		RelativeLayout rlGoal = (RelativeLayout) graphRoot
+				.findViewById(R.id.rl_goal);
 		rlGoal.setVisibility(View.VISIBLE);
 
 		int px_height = toPix(150);
 		float per_height = (float) px_height / (maxY - minY);
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, toPix(15));
-		rlParams.setMargins(toPix(40),(int) (toPix(50 - 15) + ((maxY - value) * per_height)), toPix(20), 0);
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, toPix(15));
+		rlParams.setMargins(toPix(40),
+				(int) (toPix(50 - 15) + ((maxY - value) * per_height)),
+				toPix(20), 0);
 		rlGoal.setLayoutParams(rlParams);
 		TextView tvGoal = (TextView) graphRoot.findViewById(R.id.tv_goal);
 		tvGoal.setText(value + unit);
@@ -285,8 +388,10 @@ public class GraphBar {
 	private void addTooltip(Coordinates coordinates) {
 		rlTooltip.removeAllViews();
 
-		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		rlParams.setMargins((int) coordinates.getX(), (int) coordinates.getY(),	0, 0);
+		RelativeLayout.LayoutParams rlParams = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		rlParams.setMargins((int) coordinates.getX(), (int) coordinates.getY(),
+				0, 0);
 		TextView tvTooltip = new TextView(mContext);
 		tvTooltip.setLayoutParams(rlParams);
 		tvTooltip.setText("" + ((int) coordinates.getValue()));
@@ -307,10 +412,14 @@ public class GraphBar {
 	 */
 	private void setXLabel(int flag) {
 		Calendar mDate = Calendar.getInstance();
-		RelativeLayout rlXLabelDay = (RelativeLayout) graphRoot.findViewById(R.id.rl_graph_x_label_day);
-		LinearLayout llXLabelWeek = (LinearLayout) graphRoot.findViewById(R.id.ll_graph_x_label_week);
-		LinearLayout llXLabelMonth = (LinearLayout) graphRoot.findViewById(R.id.ll_graph_x_label_month);
-		LinearLayout llXLabelYear = (LinearLayout) graphRoot.findViewById(R.id.ll_graph_x_label_year);
+		RelativeLayout rlXLabelDay = (RelativeLayout) graphRoot
+				.findViewById(R.id.rl_graph_x_label_day);
+		LinearLayout llXLabelWeek = (LinearLayout) graphRoot
+				.findViewById(R.id.ll_graph_x_label_week);
+		LinearLayout llXLabelMonth = (LinearLayout) graphRoot
+				.findViewById(R.id.ll_graph_x_label_month);
+		LinearLayout llXLabelYear = (LinearLayout) graphRoot
+				.findViewById(R.id.ll_graph_x_label_year);
 		switch (flag) {
 		case dateFlagDay:
 			tvDate.setText(DateFormat.format("MM월 dd일", mDate.getTime()));
@@ -320,9 +429,11 @@ public class GraphBar {
 			llXLabelYear.setVisibility(View.INVISIBLE);
 			break;
 		case dateFlagWeek:
-			String dateEndWeek = (String) DateFormat.format("MM월 dd일",	mDate.getTime());
+			String dateEndWeek = (String) DateFormat.format("MM월 dd일",
+					mDate.getTime());
 			mDate.add(Calendar.DAY_OF_MONTH, -6);
-			String dateStartWeek = (String) DateFormat.format("MM월 dd일 - ", 	mDate.getTime());
+			String dateStartWeek = (String) DateFormat.format("MM월 dd일 - ",
+					mDate.getTime());
 			tvDate.setText(dateStartWeek + dateEndWeek);
 
 			rlXLabelDay.setVisibility(View.INVISIBLE);
@@ -333,14 +444,17 @@ public class GraphBar {
 			ArrayList<TextView> arrLabelWeek = new ArrayList<TextView>();
 			for (int i = 0; i < 7; i++) {
 				arrLabelWeek.add((TextView) llXLabelWeek.getChildAt(i));
-				arrLabelWeek.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+				arrLabelWeek.get(i).setText(
+						mDate.get(Calendar.DAY_OF_MONTH) + "");
 				mDate.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			break;
 		case dateFlagMonth:
-			String dateEndMonth = (String) DateFormat.format("MM월 dd일", mDate.getTime());
+			String dateEndMonth = (String) DateFormat.format("MM월 dd일",
+					mDate.getTime());
 			mDate.add(Calendar.DAY_OF_MONTH, -27);
-			String dateStartMonth = (String) DateFormat.format("MM월 dd일 - ", mDate.getTime());
+			String dateStartMonth = (String) DateFormat.format("MM월 dd일 - ",
+					mDate.getTime());
 			tvDate.setText(dateStartMonth + dateEndMonth);
 
 			rlXLabelDay.setVisibility(View.INVISIBLE);
@@ -351,10 +465,12 @@ public class GraphBar {
 			for (int i = 0; i < 9; i++) {
 				arrLabelMonth.add((TextView) llXLabelMonth.getChildAt(i));
 				if (i == 0) {
-					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+					arrLabelMonth.get(i).setText(
+							mDate.get(Calendar.DAY_OF_MONTH) + "");
 					mDate.add(Calendar.DAY_OF_MONTH, 6);
 				} else if (i % 2 == 0) {
-					arrLabelMonth.get(i).setText(mDate.get(Calendar.DAY_OF_MONTH) + "");
+					arrLabelMonth.get(i).setText(
+							mDate.get(Calendar.DAY_OF_MONTH) + "");
 					mDate.add(Calendar.DAY_OF_MONTH, 7);
 				}
 			}
@@ -369,11 +485,32 @@ public class GraphBar {
 			ArrayList<TextView> arrLabelYear = new ArrayList<TextView>();
 			for (int i = 0; i < 12; i++) {
 				arrLabelYear.add((TextView) llXLabelYear.getChildAt(i));
-				arrLabelYear.get(i).setText((mDate.get(Calendar.MONTH) + 1) + "");
+				arrLabelYear.get(i).setText(
+						(mDate.get(Calendar.MONTH) + 1) + "");
 				mDate.add(Calendar.MONTH, 1);
 			}
 			break;
 		}
+	}
+
+	/**
+	 * array 의 최대값 구하기.
+	 * 
+	 * @author leejeongho
+	 * @since 2014.09.11
+	 * @param arrData
+	 *            {@link PointData} 의 ArrayList
+	 * @return array 의 최대값.
+	 */
+	private int getMaxValue(ArrayList<PointData> arrData) {
+		int maxValue = arrData.get(0).getValue();
+		for (int i = 1; i < arrData.size(); i++) {
+			int currentValue = arrData.get(i).getValue();
+			if (maxValue < currentValue) {
+				maxValue = currentValue;
+			}
+		}
+		return maxValue;
 	}
 
 }
